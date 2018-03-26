@@ -1,4 +1,5 @@
-var player, button;
+var player, button, gyroMovementX;
+var moving = false;
 var startState = {
     create: function() {
         console.log("Game started");
@@ -13,7 +14,7 @@ var startState = {
         game.physics.arcade.enable(player);
         player.body.collideWorldBounds = true;
 
-        window.addEventListener("deviceorientation", this.handleOrientation, true);
+        window.addEventListener("deviceorientation", this.handleOrientation, false);
     },
     update: function() {
 
@@ -28,8 +29,22 @@ var startState = {
         }
     },
     handleOrientation: function(e) {
-        var x = e.beta;
-        console.log(x);
-        player.body.velocity.x += x*2;
+        gyroMovementX = e.beta;
+
+        // 7 is de grens vanaf deze hoeveelheid 'tilt' zal hij iets doen
+        // 250 is de snelheid
+        if (gyroMovementX > 7 || gyroMovementX < -7) {
+            moving = true;
+        }
+        else {moving = false}
+    
+        if (moving == true){
+            
+            if (gyroMovementX > 0) {
+                player.body.velocity.x = 250;
+            }else {player.body.velocity.x = -250}
+            
+        }else {player.body.velocity.x = 0;}
+    
     }
 };
