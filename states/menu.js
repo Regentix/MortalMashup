@@ -1,6 +1,6 @@
 var menuState = {
     create: function() {
-        console.log("Initiating menu state");
+        console.log("Entering menu");
 
         var playButton = game.add.sprite(game.world.centerX, game.world.centerY, 'play');
         playButton.anchor.setTo(0.5,0.5);
