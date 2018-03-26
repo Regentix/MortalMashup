@@ -23,9 +23,11 @@ var startState = {
         game.paused = !game.paused;
         if (game.paused) {
             button.loadTexture('resume', 0);
+            console.log("Game paused");
         }
         else {
             button.loadTexture('pause', 0);
+            console.log("Game resumed");
         }
     },
     handleOrientation: function(e) {
@@ -33,18 +35,24 @@ var startState = {
 
         // 7 is de grens vanaf deze hoeveelheid 'tilt' zal hij iets doen
         // 250 is de snelheid
+
         if (gyroMovementX > 7 || gyroMovementX < -7) {
             moving = true;
         }
-        else {moving = false}
-    
-        if (moving == true){
-            
+        else {
+            moving = false
+        }
+
+        if (moving == true) {
             if (gyroMovementX > 0) {
-                player.body.velocity.x = 250;
-            }else {player.body.velocity.x = -250}
-            
-        }else {player.body.velocity.x = 0;}
-    
+                player.body.velocity.x = 250; // * Time.deltaTime please
+            }
+            else {
+                player.body.velocity.x = -250
+            }
+        }
+        else {
+            player.body.velocity.x = 0;
+        }
     }
 };

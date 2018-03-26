@@ -13,8 +13,6 @@ var loadState = {
         game.load.image("player","./assets/player.png");
         game.load.image("pause", "./assets/pause.png");
         game.load.image("resume", "./assets/resume.png");
-
-        // call menu state
     },
     create: function() {
         game.state.start("menu");
