@@ -45,7 +45,7 @@ var startState = {
 
         if (moving == true) {
             if (gyroMovementX > 0) {
-                player.body.velocity.x = 250; // * Time.deltaTime please
+                player.body.velocity.x = 250; // * Time.deltaTime please!
             }
             else {
                 player.body.velocity.x = -250
