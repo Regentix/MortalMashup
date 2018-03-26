@@ -1,23 +1,12 @@
 var game;
-
-function startGame() {
-	game = new Phaser.Game(320, 480, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
-	console.log("Game created!");
+function createGame() {
+    game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.CANVAS, "");
+    game.state.add("boot", bootState);
+    game.state.add("load", loadState);
+    game.state.add("menu", menuState);
+    game.state.add("start", startState);
+    game.state.start("boot");
 }
 
-
-
-function preload(){
-  
-}
-
-function create() {
-
-
-}
-function update(){
-
-    
-}
 
 
