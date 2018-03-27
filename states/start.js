@@ -63,6 +63,7 @@ var startState = {
         player.animations.add('jumpL', [47], 1, false);
 
         window.addEventListener("deviceorientation", this.handleOrientation, false);
+
     },
     update: function() {
         fpsText.setText("fps: " + game.time.fps);
