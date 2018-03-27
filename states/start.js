@@ -53,6 +53,9 @@ var startState = {
         player.animations.add('jumpR', [46], 1, false);
         player.animations.add('jumpL', [47], 1, false);
 
+        //game.world.setBounds(0, 0, 1000, 1000);
+        //game.camera.follow(player);
+
         window.addEventListener("deviceorientation", this.handleOrientation, false);
 
     },
