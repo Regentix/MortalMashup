@@ -92,7 +92,15 @@ var startState = {
     jump: function() {
         if (player.body.touching.down) {
             player.body.velocity.y = -250;
+            if (lookDirection == 'R') {
+                player.animations.play('jumpR', 1, false);
+            }
+            else 
+            {
+                player.animations.play('jumpL', 1, false);
+            }
         }
+        
     },
     toggleState: function() {
         game.paused = !game.paused;
@@ -141,13 +149,6 @@ var startState = {
                 player.animations.play('restR', 5, true)
             }
             player.body.velocity.x = 0;
-        }
-
-        if (player.body.onFloor() == false && lookDirection == 'R') {
-            player.animations.play('jumpR', 1, false);
-        }
-        if (player.body.onFloor() == false && lookDirection == 'L') {
-            player.animations.play('jumpL', 1, false);
         }
     }
 };
