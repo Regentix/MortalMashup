@@ -96,10 +96,10 @@ var startState = {
         // 7 is de grens vanaf deze hoeveelheid 'tilt' zal hij iets doen
         // 250 is de snelheid
 
-        if (gyroMovementX > 3) {
+        if (gyroMovementX > 5) {
             moving = true;
         }
-        else if (gyroMovementX < -3) {
+        else if (gyroMovementX < -5) {
             moving = true;
         }
         else {
