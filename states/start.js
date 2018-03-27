@@ -23,8 +23,8 @@ var startState = {
         fpsText.anchor.setTo(1,0);
         fpsText.fixedToCamera = true;
 
-        floor = game.add.sprite(game.world.centerX, window.innerHeight, 'floor');
-        floor.anchor.setTo(0.5,1);
+        floor = game.add.sprite(0, 500, 'floor');
+        floor.anchor.setTo(0,1);
         game.physics.arcade.enable(floor);
         floor.body.immovable = true;
 
@@ -42,12 +42,12 @@ var startState = {
 
         saws = game.add.group();
         saws.enableBody = true;
-        var saw = saws.create(game.world.centerX, game.world.centerY-100, 'saw');
+        var saw = saws.create(1000, game.world.centerY-100, 'saw');
         saw.animations.add('saw', [0,1,2], 15, true);
         saw.animations.play('saw', 15, true)
         saw.anchor.setTo(0.5);
 
-        player = game.add.sprite(game.world.centerX,game.world.centerY - 100,"player");
+        player = game.add.sprite(1000,game.world.centerY-50,"player");
         player.anchor.setTo(0.5);
         //player.scale.setTo(2,2);
         game.physics.arcade.enable(player);
@@ -75,8 +75,10 @@ var startState = {
         player.animations.add('jumpR', [46], 1, false);
         player.animations.add('jumpL', [47], 1, false);
 
-        game.world.setBounds(0, 0, 2000, 1000);
+        game.world.setBounds(0, 0, 2000, 500);
         game.camera.follow(player);
+
+        game.physics.arcade.collide(floor, player);
 
         window.addEventListener("deviceorientation", this.handleOrientation, false);
 
@@ -136,7 +138,7 @@ var startState = {
     handleOrientation: function(e) {
         gyroMovementX = e.beta;
 
-        // 7 is de grens vanaf deze hoeveelheid 'tilt' zal hij iets doen
+        // 3 is de grens vanaf deze hoeveelheid 'tilt' zal hij iets doen
         // 250 is de snelheid
 
         if (gyroMovementX > 3) {
