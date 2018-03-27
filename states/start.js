@@ -27,6 +27,7 @@ var startState = {
 
         player = game.add.sprite(game.world.centerX,game.world.centerY - 100,"player");
         player.anchor.setTo(0.5);
+        //player.scale.setTo(2,2);
         game.physics.arcade.enable(player);
         player.body.gravity.y = 500;
         player.body.collideWorldBounds = true;
@@ -51,6 +52,9 @@ var startState = {
 
         player.animations.add('jumpR', [46], 1, false);
         player.animations.add('jumpL', [47], 1, false);
+
+        //game.world.setBounds(0, 0, 1000, 1000);
+        //game.camera.follow(player);
 
         window.addEventListener("deviceorientation", this.handleOrientation, false);
 
