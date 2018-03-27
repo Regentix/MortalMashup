@@ -51,6 +51,7 @@ var startState = {
         weapon.trackSprite(player, 0, 0);
 
         window.addEventListener("deviceorientation", this.handleOrientation, false);
+
     },
     update: function() {
         fpsText.setText("fps: " + game.time.fps);
