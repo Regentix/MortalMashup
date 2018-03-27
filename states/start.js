@@ -134,7 +134,7 @@ var startState = {
             }
         }
         else {
-            if (lookDirection == 'L') {
+            if (lookDirection === 'L') {
                 player.animations.play('restL', 5, true);
             } 
             else {
