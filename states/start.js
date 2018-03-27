@@ -87,10 +87,16 @@ var startState = {
         fpsText.setText("fps: " + game.time.fps);
         game.physics.arcade.collide(player, floor);
         if (game.input.pointer1.isDown) {
-            if (game.input.x > window.innerWidth / 2) {
+            if (game.input.x > window.innerWidth / 2 && game.input.x < window.innerWidth - 161) {
                 weapon.fireAngle = 0;
                 player.animations.play('shotR', 20, false);
                 weapon.fire();
+            } else if (game.input.x > window.innerWidth / 2 && game.input.x > window.innerWidth - 161) {
+                if (game.input.y < window.innerHeight - 85) {
+                    weapon.fireAngle = 0;
+                    player.animations.play('shotR', 20, false);
+                    weapon.fire();
+                }
             }
             else {
                 weapon.fireAngle = 180;
