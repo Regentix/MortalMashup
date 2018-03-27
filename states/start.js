@@ -1,4 +1,4 @@
-var player, stateButton, gyroMovementX, weapon, fireButton_L, fireButton_R, jumpButton, direction, floor, fpsText;
+var player, stateButton, gyroMovementX, weapon, fireButton_L, fireButton_R, jumpButton, direction, floor, fpsText, lookDirection;
 var moving = false;
 var isShooting = false;
 var startState = {
