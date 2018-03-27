@@ -16,7 +16,7 @@ var startState = {
         landscape.scale.setTo(backgroundRatio,backgroundRatio);
         landscape.fixedToCamera = true;
 
-        fpsText = game.add.text(window.innerWidth - 44, 10, "fps: 0", {
+        fpsText = game.add.text(window.innerWidth - 44, 10, game.time.fps, {
             font: "24px Arial",
             fill: "#000"
         });
@@ -84,7 +84,7 @@ var startState = {
 
     },
     update: function() {
-        fpsText.setText("fps: " + game.time.fps);
+        fpsText.setText(game.time.fps);
         game.physics.arcade.collide(player, floor);
         if (game.input.pointer1.isDown) {
             if (game.input.x > window.innerWidth / 2 && game.input.x < window.innerWidth - 161) {
