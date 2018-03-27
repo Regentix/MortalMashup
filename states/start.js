@@ -1,4 +1,4 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection, shot;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection, shot, cursors;
 var moving = false;
 var startState = {
     create: function() {
@@ -52,6 +52,7 @@ var startState = {
         player.animations.add('jumpR', [46], 1, false);
         player.animations.add('jumpL', [47], 1, false);
 
+        cursors = game.input.keyboard.createCursorKeys();
         window.addEventListener("deviceorientation", this.handleOrientation, false);
 
     },
@@ -78,16 +79,15 @@ var startState = {
                 else {
                     player.animations.play('restR', 5, true)
                 }
-                player.body.velocity.x = 0;
             }
-        }
-        if (player.body.touching.down === false) {
-            if (lookDirection === 'L') {
-                player.animations.play('jumpL', 1, false);
-            }
-            else 
-            {
-                player.animations.play('jumpR', 1, false);
+            if (player.body.touching.down === false) {
+                if (lookDirection === 'L') {
+                    player.animations.play('jumpL', 1, false);
+                }
+                else 
+                {
+                    player.animations.play('jumpR', 1, false);
+                }
             }
         }
     },
@@ -135,6 +135,9 @@ var startState = {
                 player.animations.play('walkL', 10, true);
                 lookDirection = 'L';
             }
+        }
+        if (moving === false) {
+            player.body.velocity.x = 0;
         }
     }
 };
