@@ -96,13 +96,14 @@ var startState = {
                 if (game.input.y < window.innerHeight - 85) {
                     weapon.fireAngle = 0;
                     player.animations.play('shotR', 20, false);
-                    lookDirection = 'L';
+                    lookDirection = 'R';
                     weapon.fire();
                 }
             }
             else {
                 weapon.fireAngle = 180;
                 player.animations.play('shotL', 20, false);
+                lookDirection = 'L';
                 weapon.fire();
             }
         }
