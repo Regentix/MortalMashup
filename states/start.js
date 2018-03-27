@@ -27,6 +27,7 @@ var startState = {
 
         player = game.add.sprite(game.world.centerX,game.world.centerY - 100,"player");
         player.anchor.setTo(0.5);
+        //player.scale.setTo(2,2);
         game.physics.arcade.enable(player);
         player.body.gravity.y = 500;
         player.body.collideWorldBounds = true;
