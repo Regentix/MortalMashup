@@ -1,6 +1,5 @@
-var player, stateButton, gyroMovementX, weapon, fireButton_L, fireButton_R, jumpButton, direction, floor, fpsText, lookDirection;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection;
 var moving = false;
-var isShooting = false;
 var startState = {
     create: function() {
         console.log("Game started");
@@ -21,19 +20,7 @@ var startState = {
         stateButton.inputEnabled = true;
         stateButton.events.onInputDown.add(this.toggleState, this);
 
-        fireButton_L = game.add.sprite(10, window.innerHeight - 10, 'fire_L');
-        fireButton_L.anchor.setTo(0,1);
-        fireButton_L.inputEnabled = true;
-        fireButton_L.events.onInputDown.add(this.fireLeft, this);
-        fireButton_L.events.onInputUp.add(this.resetFire, this);
-
-        fireButton_R = game.add.sprite(window.innerWidth - 10, window.innerHeight - 10, 'fire_R');
-        fireButton_R.anchor.setTo(1,1);
-        fireButton_R.inputEnabled = true;
-        fireButton_R.events.onInputDown.add(this.fireRight, this);
-        fireButton_R.events.onInputUp.add(this.resetFire, this);
-
-        jumpButton = game.add.sprite(window.innerWidth - 10, window.innerHeight - 120, 'jump');
+        jumpButton = game.add.sprite(window.innerWidth - 10, window.innerHeight - 10, 'jump');
         jumpButton.anchor.setTo(1,1);
         jumpButton.inputEnabled = true;
         jumpButton.events.onInputDown.add(this.jump, this);
@@ -67,27 +54,17 @@ var startState = {
     },
     update: function() {
         fpsText.setText("fps: " + game.time.fps);
-        if (isShooting) {
-            if (direction === "L") {
-                weapon.fireAngle = 180;
-                weapon.fire();
-            } else {
+        if (game.input.pointer1.isDown) {
+            if (game.input.x > window.innerWidth / 2) {
                 weapon.fireAngle = 0;
+                weapon.fire();
+            }
+            else {
+                weapon.fireAngle = 180;
                 weapon.fire();
             }
         }
         game.physics.arcade.collide(player, floor);
-    },
-    fireLeft: function() {
-        isShooting = true;
-        direction = "L";
-    },
-    fireRight: function() {
-        isShooting = true;
-        direction = "R";
-    },
-    resetFire: function() {
-        isShooting = false;
     },
     jump: function() {
         if (player.body.touching.down) {
