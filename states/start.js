@@ -1,9 +1,15 @@
-var player, stateButton, gyroMovementX, weapon, fireButton_L, fireButton_R, jumpButton, direction, floor;
+var player, stateButton, gyroMovementX, weapon, fireButton_L, fireButton_R, jumpButton, direction, floor, fpsText;
 var moving = false;
 var isShooting = false;
 var startState = {
     create: function() {
         console.log("Game started");
+
+        fpsText = game.add.text(window.innerWidth - 44, 10, "fps: 0", {
+            font: "24px Arial",
+            fill: "#000"
+        });
+        fpsText.anchor.setTo(1,0);
 
         floor = game.add.sprite(game.world.centerX, game.world.centerY, 'floor');
         floor.anchor.setTo(0.5);
@@ -47,6 +53,7 @@ var startState = {
         window.addEventListener("deviceorientation", this.handleOrientation, false);
     },
     update: function() {
+        fpsText.setText("fps: " + game.time.fps);
         if (isShooting) {
             if (direction === "L") {
                 weapon.fireAngle = 180;
@@ -91,7 +98,7 @@ var startState = {
         // 7 is de grens vanaf deze hoeveelheid 'tilt' zal hij iets doen
         // 250 is de snelheid
 
-        if (gyroMovementX > 7 || gyroMovementX < -7) {
+        if (gyroMovementX > 3 || gyroMovementX < -3) {
             moving = true;
         }
         else {
@@ -103,7 +110,7 @@ var startState = {
                 player.body.velocity.x = 250; // * Time.deltaTime please!
             }
             else {
-                player.body.velocity.x = -250
+                player.body.velocity.x = -250;
             }
         }
         else {
