@@ -50,10 +50,6 @@ var startState = {
         weapon.fireRate = 400;
         weapon.trackSprite(player, 0, 0);
 
-
-
-
-
         player.animations.add('walkR', [0,1,2,3,4,5,6,7], 10, true);
         player.animations.add('walkL', [8,9,10,11,12,13,14,15], 10, true);
 
