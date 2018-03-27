@@ -8,7 +8,7 @@ var startState = {
         landscape.anchor.setTo(0.5);
         var backgroundRatio;
         if(window.innerHeight > window.innerWidth) {
-            backgroundRatio = window.innerHeight/1080;
+            backgroundRatio = window.innerHeight/1920;
         }
         else {
             backgroundRatio = window.innerWidth/1920;
