@@ -6,14 +6,22 @@ var startState = {
 
         landscape = game.add.sprite(game.world.centerX, game.world.centerY, 'landscape');
         landscape.anchor.setTo(0.5);
-        var backgroundRatio = window.innerHeight/1080;
+        var backgroundRatio;
+        if(window.innerHeight > window.innerWidth) {
+            backgroundRatio = window.innerHeight/1080;
+        }
+        else {
+            backgroundRatio = window.innerWidth/1920;
+        }
         landscape.scale.setTo(backgroundRatio,backgroundRatio);
+        landscape.fixedToCamera = true;
 
         fpsText = game.add.text(window.innerWidth - 44, 10, "fps: 0", {
             font: "24px Arial",
             fill: "#000"
         });
         fpsText.anchor.setTo(1,0);
+        fpsText.fixedToCamera = true;
 
         floor = game.add.sprite(game.world.centerX, window.innerHeight, 'floor');
         floor.anchor.setTo(0.5,1);
@@ -24,11 +32,13 @@ var startState = {
         stateButton.anchor.setTo(1,0);
         stateButton.inputEnabled = true;
         stateButton.events.onInputDown.add(this.toggleState, this);
+        stateButton.fixedToCamera = true;
 
         jumpButton = game.add.sprite(window.innerWidth - 10, window.innerHeight - 10, 'jump');
         jumpButton.anchor.setTo(1,1);
         jumpButton.inputEnabled = true;
         jumpButton.events.onInputDown.add(this.jump, this);
+        jumpButton.fixedToCamera = true;
 
         saws = game.add.group();
         saws.enableBody = true;
@@ -65,8 +75,8 @@ var startState = {
         player.animations.add('jumpR', [46], 1, false);
         player.animations.add('jumpL', [47], 1, false);
 
-        //game.world.setBounds(0, 0, 1000, 1000);
-        //game.camera.follow(player);
+        game.world.setBounds(0, 0, 2000, 1000);
+        game.camera.follow(player);
 
         window.addEventListener("deviceorientation", this.handleOrientation, false);
 
