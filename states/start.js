@@ -54,6 +54,7 @@ var startState = {
     },
     update: function() {
         fpsText.setText("fps: " + game.time.fps);
+        game.physics.arcade.collide(player, floor);
         if (game.input.pointer1.isDown) {
             if (game.input.x > window.innerWidth / 2) {
                 weapon.fireAngle = 0;
@@ -64,18 +65,28 @@ var startState = {
                 weapon.fire();
             }
         }
-        game.physics.arcade.collide(player, floor);
+        if (player.body.touching.down === false) {
+            if (lookDirection == 'L') {
+                player.animations.play('jumpL', 1, false);
+            }
+            else 
+            {
+                player.animations.play('jumpR', 1, false);
+            }
+        }
+        if (moving === false && player.body.touching.down) {
+            if (lookDirection === 'L') {
+                player.animations.play('restL', 5, true);
+            } 
+            else {
+                player.animations.play('restR', 5, true)
+            }
+            player.body.velocity.x = 0;
+        }
     },
     jump: function() {
         if (player.body.touching.down) {
             player.body.velocity.y = -250;
-            if (lookDirection == 'R') {
-                player.animations.play('jumpR', 1, false);
-            }
-            else 
-            {
-                player.animations.play('jumpL', 1, false);
-            }
         }
         
     },
@@ -117,15 +128,6 @@ var startState = {
                 player.animations.play('walkL', 10, true);
                 lookDirection = 'L';
             }
-        }
-        else {
-            if (lookDirection === 'L') {
-                player.animations.play('restL', 5, true);
-            } 
-            else {
-                player.animations.play('restR', 5, true)
-            }
-            player.body.velocity.x = 0;
         }
     }
 };
