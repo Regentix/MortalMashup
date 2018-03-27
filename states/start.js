@@ -12,13 +12,7 @@ var startState = {
 
         landscape = game.add.sprite(game.world.centerX, game.world.centerY, 'landscape');
         landscape.anchor.setTo(0.5);
-        var backgroundRatio;
-        if (window.innerWidth > window.innerHeight) {
-            backgroundRatio = window.innerWidth/1920;
-        }
-        else {
-            backgroundRatio = window.innerHeight/1080;
-        }
+        var backgroundRatio = window.innerHeight/1080;
         landscape.scale.setTo(backgroundRatio,backgroundRatio);
 
 
