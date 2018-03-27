@@ -1,15 +1,9 @@
-var player, stateButton, gyroMovementX, weapon, fireButton_L, fireButton_R, jumpButton, direction, floor, fpsText;
+var player, stateButton, gyroMovementX, weapon, fireButton_L, fireButton_R, jumpButton, direction, floor;
 var moving = false;
 var isShooting = false;
 var startState = {
     create: function() {
         console.log("Game started");
-
-        fpsText = game.add.text(window.innerWidth - 44, 10, "fps: 0", {
-            font: "24px Arial",
-            fill: "#000"
-        });
-        fpsText.anchor.setTo(1,0);
 
         floor = game.add.sprite(game.world.centerX, game.world.centerY, 'floor');
         floor.anchor.setTo(0.5);
@@ -69,7 +63,6 @@ var startState = {
         window.addEventListener("deviceorientation", this.handleOrientation, false);
     },
     update: function() {
-        fpsText.setText("fps: " + game.time.fps);
         if (isShooting) {
             if (direction === "L") {
                 weapon.fireAngle = 180;
@@ -95,6 +88,12 @@ var startState = {
     jump: function() {
         if (player.body.touching.down) {
             player.body.velocity.y = -250;
+            if (lookDirection == 'L') {
+                player.animations.play('jumpL', 1, false);
+            }
+            else {
+                player.animations.play('jumpR', 1, false)
+            }
         }
     },
     toggleState: function() {
@@ -152,5 +151,6 @@ var startState = {
         if (player.body.onFloor() == false && lookDirection == 'L') {
             player.animations.play('jumpL', 1, false);
         }
+        
     }
 };
