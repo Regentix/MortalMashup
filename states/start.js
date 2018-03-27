@@ -4,17 +4,16 @@ var startState = {
     create: function() {
         console.log("Game started");
 
-        fpsText = game.add.text(window.innerWidth - 44, 10, "fps: 0", {
-            font: "24px Arial",
-            fill: "#000"
-        });
-        fpsText.anchor.setTo(1,0);
-
         landscape = game.add.sprite(game.world.centerX, game.world.centerY, 'landscape');
         landscape.anchor.setTo(0.5);
         var backgroundRatio = window.innerHeight/1080;
         landscape.scale.setTo(backgroundRatio,backgroundRatio);
 
+        fpsText = game.add.text(window.innerWidth - 44, 10, "fps: 0", {
+            font: "24px Arial",
+            fill: "#000"
+        });
+        fpsText.anchor.setTo(1,0);
 
         floor = game.add.sprite(game.world.centerX, window.innerHeight, 'floor');
         floor.anchor.setTo(0.5,1);
