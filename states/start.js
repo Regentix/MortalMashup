@@ -1,4 +1,4 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection, shot;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection, landscape;
 var moving = false;
 var startState = {
     create: function() {
@@ -10,8 +10,12 @@ var startState = {
         });
         fpsText.anchor.setTo(1,0);
 
-        floor = game.add.sprite(game.world.centerX, game.world.centerY, 'floor');
-        floor.anchor.setTo(0.5);
+        landscape = game.add.sprite(game.world.centerX, game.world.centerY, 'landscape');
+        landscape.anchor.setTo(0.5);
+
+
+        floor = game.add.sprite(game.world.centerX, window.innerHeight, 'floor');
+        floor.anchor.setTo(0.5,1);
         game.physics.arcade.enable(floor);
         floor.body.immovable = true;
 
@@ -24,6 +28,13 @@ var startState = {
         jumpButton.anchor.setTo(1,1);
         jumpButton.inputEnabled = true;
         jumpButton.events.onInputDown.add(this.jump, this);
+
+        saws = game.add.group();
+        saws.enableBody = true;
+        var saw = saws.create(game.world.centerX, game.world.centerY-100, 'saw');
+        saw.animations.add('saw', [0,1,2], 15, true);
+        saw.animations.play('saw', 15, true)
+        saw.anchor.setTo(0.5);
 
         player = game.add.sprite(game.world.centerX,game.world.centerY - 100,"player");
         player.anchor.setTo(0.5);
