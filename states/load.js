@@ -13,6 +13,11 @@ var loadState = {
         game.load.image("player","./assets/player.png");
         game.load.image("pause", "./assets/pause.png");
         game.load.image("resume", "./assets/resume.png");
+        game.load.image("bullet", "./assets/bullet.png");
+        game.load.image("fire_L", "./assets/buttons/fire_L.png");
+        game.load.image("fire_R", "./assets/buttons/fire_R.png");
+        game.load.image("jump", "./assets/buttons/jump.png");
+        game.load.image("floor", "./assets/world/floor.png");
     },
     create: function() {
         game.state.start("menu");
