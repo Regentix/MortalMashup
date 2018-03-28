@@ -18,7 +18,7 @@ var loadState = {
         game.load.image("jump", "./assets/buttons/jump.png");
         game.load.image("floor", "./assets/world/floor.png");
         game.load.image("landscape", "./assets/world/landscape.png");
-        game.load.spritesheet('player', './assets/player/Player_sheetBig.png', 60, 60);
+        game.load.spritesheet('player', './assets/player/Player_sheetBounds.png', 40, 60);
         game.load.spritesheet('saw', './assets/world/obstacles/saw.png', 40, 40);
     },
     create: function() {
