@@ -328,7 +328,7 @@ var startState = {
         {
             player.body.position.x += -7;
 
-            if (!player.body.blocked.left && !player.body.blocked.right) {
+            if (!game.camera.atLimit.x) {
                 landscape2.tilePosition.x += 0.05;
                 landscape3.tilePosition.x += 0.35;
                 landscape4.tilePosition.x += 0.65;
@@ -344,7 +344,7 @@ var startState = {
         {
             player.body.position.x += 7;
 
-            if (!player.body.blocked.left && !player.body.blocked.right) {
+            if (!game.camera.atLimit.x) {
                 landscape2.tilePosition.x -= 0.05;
                 landscape3.tilePosition.x -= 0.35;
                 landscape4.tilePosition.x -= 0.65;
@@ -406,7 +406,7 @@ var startState = {
             if (gyroMovementX > 0) {
                 player.body.velocity.x = 250;
                 
-                if (!player.body.blocked.left && !player.body.blocked.right) {
+                if (!game.camera.atLimit.x) {
                     landscape2.tilePosition.x -= 0.05;
                     landscape3.tilePosition.x -= 0.35;
                     landscape4.tilePosition.x -= 0.65;
@@ -420,7 +420,7 @@ var startState = {
             else {
                 player.body.velocity.x = -250;
 
-                if (!player.body.blocked.left && !player.body.blocked.right) {
+                if (!game.camera.atLimit.x) {
                     landscape2.tilePosition.x += 0.05;
                     landscape3.tilePosition.x += 0.35;
                     landscape4.tilePosition.x += 0.65;
