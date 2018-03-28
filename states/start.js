@@ -200,7 +200,6 @@ var startState = {
 
 
         for (var k = 1; k < maxBills; k++) {
-
             var value = game.rnd.integerInRange(0,4);
             while (prevValue === value) {
                 value = game.rnd.integerInRange(0,4);
@@ -209,13 +208,12 @@ var startState = {
             var bulletBill = bulletBills.create(game.world.width, billHeights[value] , 'bill');
             bulletBill.body.velocity.x = game.rnd.integerInRange(-150, -300);
             bulletBill.checkWorldBounds = true;
-            bulletBill.events.onOutOfBounds.add(removeBullet, this);
-
+            bulletBill.events.onOutOfBounds.add(removeSprite, this);
             prevValue = value;
         }
 
-        function removeBullet() {
-            bulletBill.kill();
+        function removeSprite(sprite) {
+            sprite.kill();
         }
 
         //tetris
@@ -225,6 +223,8 @@ var startState = {
         if (standing === true || moving === false) {
             tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,3)]);
             game.physics.arcade.enable(tetris);
+            tetris.checkWorldBounds = true;
+            tetris.events.onOutOfBounds.add(removeSprite, this);
             tetris.anchor.setTo(0.5,0.5);
             tetris.scale.setTo(2);
             tetris.body.gravity.y = 400;
