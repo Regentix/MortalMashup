@@ -80,9 +80,9 @@ var startState = {
         game.physics.arcade.collide(floor, player);
 
         this.platforms = this.add.physicsGroup();
-        this.maxPlatforms = 25;
+        this.maxPlatforms = 50;
       
-        var yRange = [370,310,250];
+        var yRange = [340,270,200];
         var prevY = 0;
         var prevI = 0;
         
@@ -160,7 +160,7 @@ var startState = {
     },
     jump: function() {
         if (player.body.touching.down) {
-            player.body.velocity.y = -250;
+            player.body.velocity.y = -300;
         }
         
     },
