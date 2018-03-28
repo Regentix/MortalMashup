@@ -180,41 +180,10 @@ var startState = {
         game.physics.arcade.collide(player, lavas, this.lavaHit, null, this);
         game.physics.arcade.collide(player, saws, this.takeHit, null, this);
         game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
-
         
         if (timerInvincible.ms > 100 && timerInvincible.ms < 2000) {
             game.camera.flash(0xbf3b3b, 500);
         }
-            /*case 100:
-                player.tint = 0xff8484;
-                break;
-            case 300:
-                player.tint = 0xffffff;
-                break;
-            case 500:
-                player.tint = 0xff8484;
-                break;
-            case 700:
-                player.tint = 0xffffff;
-                break;
-            case 900:
-                player.tint = 0xff8484;
-                break;
-            case 1100:
-                player.tint = 0xffffff;
-                break;
-            case 1300:
-                player.tint = 0xff8484;
-                break;
-            case 1500:
-                player.tint = 0xffffff;
-                break;
-            case 1700:
-                player.tint = 0xff8484;
-                break;
-            case 1900:
-                player.tint = 0xffffff;
-                break;*/
 
         if (hasDied) {
             this.die();
