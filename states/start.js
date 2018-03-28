@@ -1,5 +1,5 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, x, y, rndMap, cursors, floors, lavas, restartButton, saws, bulletBills;
-var score = 0, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, x, y, rndMap, cursors, floors, lavas, restartButton, saws, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
+var score = 0;
 var health = 3;
 var invincible = false;
 var lookDirection = "R";
