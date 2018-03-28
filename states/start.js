@@ -1,4 +1,4 @@
-var player, moving = false, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection = "R", landscape, platforms, platforms, x, y, rndMap;
+var player, moving = false, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection = "R", landscape, platforms, platforms, x, y, rndMap, cursors;
 var score = 0, scoreText, highscore, health = 3, hearts, hasDied = false, animDieR, animDieL;
 var yHeights = [340,260,180,120];
 var platformMap = {
@@ -128,6 +128,7 @@ var startState = {
         player.animations.add('jumpR', [46], 1, false);
         player.animations.add('jumpL', [47], 1, false);
 
+        cursors = game.input.keyboard.createCursorKeys();
         window.addEventListener("deviceorientation", this.handleOrientation, false);
 
     },
@@ -185,6 +186,20 @@ var startState = {
                     }
                 }
             }
+        }
+        if (cursors.left.isDown)
+        {
+            player.body.position.x += -7;
+
+            player.animations.play('walkL', true);
+            lookDirection = 'L';
+        }
+        if (cursors.right.isDown)
+        {
+            player.body.position.x += 7;
+
+            player.animations.play('walkR', true);
+            lookDirection = 'R';
         }
     },
     jump: function() {
