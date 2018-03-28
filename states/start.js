@@ -107,6 +107,9 @@ var startState = {
         game.physics.arcade.enable(player);
         player.body.gravity.y = 500;
         player.body.collideWorldBounds = true;
+
+        game.camera.x = player.body.position.x;
+        game.camera.y = player.body.position.y;
         game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 
         weapon = game.add.weapon(30, "bullet");
@@ -178,8 +181,11 @@ var startState = {
         game.physics.arcade.collide(player, saws, this.takeHit, null, this);
         game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
 
-        switch (timerInvincible.ms) {
-            case 100:
+        
+        if (timerInvincible.ms > 100 && timerInvincible.ms < 2000) {
+            game.camera.flash(0xbf3b3b, 500);
+        }
+            /*case 100:
                 player.tint = 0xff8484;
                 break;
             case 300:
@@ -208,8 +214,7 @@ var startState = {
                 break;
             case 1900:
                 player.tint = 0xffffff;
-                break;
-        }
+                break;*/
 
         if (hasDied) {
             this.die();
@@ -348,7 +353,6 @@ var startState = {
             timerInvincible.destroy();
             timerInvincible = game.time.create();
             timerEvent = timerInvincible.add(Phaser.Timer.SECOND * 2, this.endInvincible, this);
-            timerInvincible.start();
             timerInvincible.start();
         }
     },
