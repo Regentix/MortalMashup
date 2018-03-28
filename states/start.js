@@ -1,16 +1,16 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, x, y, rndMap, cursors, floors, lavas, restartButton;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, x, y, rndMap, cursors, floors, lavas, restartButton, saws;
 var score = 0, scoreText, highscore, hearts,  animDieR, animDieL;
 var health = 3;
 var lookDirection = "R";
 var moving = false;
 var hasDied = false;
-var yHeights = [340,260,180,120];
+var yHeights = [0,340,260,180,120];
 var platformMap = {
-    0: [0,1,2,3,2,1,0,0,1,2,3,0,1,2,1,0,1,0,1,2],
-    1: [3,2,1,0,0,1,0,3,2,1,0,2,3,0,0,1,3,2,1,0],
-    2: [0,1,2,0,1,2,0,1,2,0,1,2,0,1,2,0,1,2,0,1],
-    3: [3,2,1,2,3,2,1,0,1,2,3,2,1,0,1,2,3,2,1,2],
-    4: [0,3,2,1,3,2,1,3,2,3,1,2,3,0,1,2,0,3,2,1]
+    0: [0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
+    1: [0,4,0,3,0,2,0,1,0,1,0,2,0,1,0,4,0,3,0,2,0,1,0,3,0,4,0,1,0,1,0,2,0,4,0,3,0,2,0,2],
+    2: [0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2],
+    3: [0,4,0,3,0,2,0,3,0,4,0,3,0,2,0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,2,0,3,0,4,0,3,0,2,0,3],
+    4: [0,1,0,4,0,3,0,1,0,3,0,2,0,1,0,3,0,2,0,3,0,1,0,2,0,3,0,1,0,1,0,2,0,1,0,3,0,2,0,1]
 };
 var floorMap = {
     0: [0,1,0,1,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,1,0,1,0,1,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,1],
@@ -48,19 +48,19 @@ var startState = {
         floors = this.add.physicsGroup();
         lavas = this.add.physicsGroup();
 
-        rndMap = game.rnd.integerInRange(0,3);
-
-        console.log("Platform spawn: map " + rndMap);
-
-        for (var i = 0, ilen = 20; i < ilen; i++) {
-            x = game.world.width / platformMap[rndMap].length * i;
-            y = yHeights[platformMap[rndMap][i]];
-            var platform = platforms.create( x , y, 'platform');
-            platform.body.immovable = true;
-            platform.anchor.setTo(1,0);
-        }
-
         rndMap = game.rnd.integerInRange(0,4);
+
+        console.log("Loading map " + rndMap);
+
+        for (var i = 0, ilen = 40; i < ilen; i++) {
+            if (platformMap[rndMap][i] > 0) {
+                x = 100 * i;
+                y = yHeights[platformMap[rndMap][i]];
+                var platform = platforms.create( x , y, 'platform');
+                platform.body.immovable = true;
+                platform.anchor.setTo(1,0);
+            }
+        }
 
         for (var j = 0, jlen = 40; j < jlen; j++) {
             x = 100 * j;
