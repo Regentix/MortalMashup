@@ -82,7 +82,7 @@ var startState = {
         this.platforms = this.add.physicsGroup();
         this.maxPlatforms = 50;
       
-        var yRange = [340,270,200];
+        var yRange = [340,260,180];
         var prevY = 0;
         var prevI = 0;
         
@@ -160,7 +160,7 @@ var startState = {
     },
     jump: function() {
         if (player.body.touching.down) {
-            player.body.velocity.y = -300;
+            player.body.velocity.y = -320;
         }
         
     },
