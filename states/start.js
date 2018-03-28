@@ -1,5 +1,9 @@
-var player, moving = false, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection = "R", landscape, platforms, platforms, x, y, rndMap, cursors;
-var score = 0, scoreText, highscore, health = 3, hearts, hasDied = false, animDieR, animDieL;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, x, y, rndMap, cursors, floors, lavas;
+var score = 0, scoreText, highscore, hearts,  animDieR, animDieL;
+var health = 3;
+var lookDirection = "R";
+var moving = false;
+var hasDied = false;
 var yHeights = [340,260,180,120];
 var platformMap = {
     0: [0,1,2,3,2,1,0,0,1,2,3,0,1,2,1,0,1,0,1,2],
@@ -141,7 +145,7 @@ var startState = {
 
         if (hasDied) {
             this.die();
-        } 
+        }
         else {
             if (game.input.pointer1.isDown) {
                 if (game.input.x > window.innerWidth / 2 && game.input.x < window.innerWidth - 161) {
@@ -299,10 +303,10 @@ var startState = {
                 hasDied = false;
                 game.state.start("menu");
                 health = 3;
-                score = 0; 
+                score = 0;
             }, animDieL);
         }
-        else 
+        else
         {
             player.animations.play('diedR', 8, false);
             console.log("Player died watching right");
