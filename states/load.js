@@ -27,6 +27,7 @@ var loadState = {
         game.load.spritesheet('player', './assets/player/Player_sheetBounds.png', 40, 60);
         game.load.spritesheet('saw', './assets/world/obstacles/saw.png', 40, 40);
         game.load.bitmapFont('carrier_command', 'assets/fonts/carrier_command.png', 'assets/fonts/carrier_command.xml');
+        game.load.image('bill', './assets/enemy/bill.png');
     },
     create: function() {
         game.state.start("menu");

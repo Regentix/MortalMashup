@@ -5,6 +5,7 @@ var lookDirection = "R";
 var moving = false;
 var hasDied = false;
 var yHeights = [340,260,180,120];
+var billHeights = [380,300,220,140];
 var platformMap = {
     0: [0,1,2,3,2,1,0,0,1,2,3,0,1,2,1,0,1,0,1,2],
     1: [3,2,1,0,0,1,0,3,2,1,0,2,3,0,0,1,3,2,1,0],
@@ -137,6 +138,38 @@ var startState = {
 
         player.animations.add('jumpR', [46], 1, false);
         player.animations.add('jumpL', [47], 1, false);
+
+        // bulletbills 
+        var maxBills = 5;
+        var prevValue = 0;
+        var bulletBills = this.add.physicsGroup();
+        game.physics.arcade.enable(bulletBills);
+
+
+        for (var i = 1; i < maxBills; i++) {
+
+            var value = game.rnd.integerInRange(0,3);
+            while (prevValue === value) {
+                var value = game.rnd.integerInRange(0,3);
+            }
+                console.log(value);
+
+        var bulletBill = bulletBills.create(game.world.width, billHeights[value] , 'bill');
+        var rndVel = game.rnd.integerInRange(-150, -300);
+        bulletBill.body.velocity.x = rndVel;
+        bulletBill.checkWorldBounds = true;
+        bulletBill.events.onOutOfBounds.add(removeBullet, this);
+
+    prevValue = value;
+}
+
+function removeBullet(sprite, int) {
+
+        bulletBill.kill();   
+        console.log(sprite);
+
+}
+
 
         cursors = game.input.keyboard.createCursorKeys();
         window.addEventListener("deviceorientation", this.handleOrientation, false);
