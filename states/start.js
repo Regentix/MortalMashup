@@ -136,6 +136,8 @@ var startState = {
         game.physics.arcade.collide(player, platforms, null, null, this);
         game.physics.arcade.collide(player, floors, null, null, this);
         game.physics.arcade.collide(player, floors, this.takeHit, null, this);
+        game.physics.arcade.collide(player, saws, this.takeHit, null, this);
+
         if (hasDied) {
             this.die();
         } 
