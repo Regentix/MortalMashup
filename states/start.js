@@ -1,5 +1,7 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection, landscape,platforms, maxPlatforms;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection, landscape, platforms;
 var moving = false;
+var yHeights = [340,260,180,120];
+var spawnMap = [0,1,2,3,2,1,0,0,1,2,3,0,1,2,1,0,1,0,1,2,3];
 var startState = {
     create: function() {
         console.log("Game started");
@@ -79,35 +81,16 @@ var startState = {
         game.camera.follow(player);
         game.physics.arcade.collide(floor, player);
 
-        this.platforms = this.add.physicsGroup();
-        this.maxPlatforms = 50;
-      
-        var yRange = [340,260,180];
-        var prevY = 0;
-        var prevI = 0;
-        
-        var x, y;
-        for (var i = 1; i < this.maxPlatforms; i++) {
-            if (game.rnd.integerInRange(1,10) < 5 ) {
-                x = 150 * i;
-                prevI++;
+        platforms = this.add.physicsGroup();
 
-                if (prevI === i) {
-                    y = game.rnd.integerInRange(0,2);
-                    while (prevY === yRange[y]) {
-                        y = game.rnd.integerInRange(0,2);
-                    }
-                } 
-                    
-                else {
-                        y = 0;
-                }
-                var platform = this.platforms.create( x , yRange[y], 'platform');
-                platform.body.immovable = true;
-            }    
-            prevI = i;
-            prevY = yRange[y];
-                       
+        var x, y;
+
+        for (var i = 0, ilen = spawnMap.length; i < ilen; i++) {
+            x = game.world.width / spawnMap.length * i;
+            y = yHeights[spawnMap[i]];
+            console.log("x: " + x + " y: " + y);
+            var platform = platforms.create( x , y, 'platform');
+            platform.body.immovable = true;
         }
 
         window.addEventListener("deviceorientation", this.handleOrientation, false);
