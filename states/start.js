@@ -1,6 +1,7 @@
 var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, x, y, rndMap, cursors, floors, lavas, restartButton, saws;
-var score = 0, scoreText, highscore, hearts,  animDieR, animDieL;
+var score = 0, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
 var health = 3;
+var invincible = false;
 var lookDirection = "R";
 var moving = false;
 var hasDied = false;
@@ -137,6 +138,8 @@ var startState = {
         player.animations.add('jumpR', [46], 1, false);
         player.animations.add('jumpL', [47], 1, false);
 
+        timerInvincible = game.time.create();
+
         // bulletbills 
         var maxBills = 5;
         var prevValue = 0;
@@ -175,6 +178,39 @@ var startState = {
         game.physics.arcade.collide(player, floors, null, null, this);
         game.physics.arcade.collide(player, lavas, this.lavaHit, null, this);
         game.physics.arcade.collide(player, saws, this.takeHit, null, this);
+
+        switch (timerInvincible.ms) {
+            case 100:
+                player.tint = 0xdbdbdb;
+                break;
+            case 300:
+                player.tint = 0xffffff;
+                break;
+            case 500:
+                player.tint = 0xdbdbdb;
+                break;
+            case 700:
+                player.tint = 0xffffff;
+                break;
+            case 900:
+                player.tint = 0xdbdbdb;
+                break;
+            case 1100:
+                player.tint = 0xffffff;
+                break;
+            case 1300:
+                player.tint = 0xdbdbdb;
+                break;
+            case 1500:
+                player.tint = 0xffffff;
+                break;
+            case 1700:
+                player.tint = 0xdbdbdb;
+                break;
+            case 1900:
+                player.tint = 0xffffff;
+                break;
+        }
 
         if (hasDied) {
             this.die();
@@ -297,42 +333,59 @@ var startState = {
         }
     },
     takeHit: function() {
-        health -= 1;
-        if (health === 2) {
-            hearts.loadTexture('heart2', 0);
-        }
-        else if (health === 1) {
-            hearts.loadTexture('heart1', 0);
-        }
-        else if (health === 0) {
-            hearts.loadTexture('heart0', 0);
-            hasDied = true;
+        if (!invincible) {
+            health -= 1;
+            if (health === 2) {
+                hearts.loadTexture('heart2', 0);
+            }
+            else if (health === 1) {
+                hearts.loadTexture('heart1', 0);
+            }
+            else if (health === 0) {
+                hearts.loadTexture('heart0', 0);
+                hasDied = true;
+            }
+            invincible = true;
+            timerInvincible.destroy();
+            timerInvincible = game.time.create();
+            timerEvent = timerInvincible.add(Phaser.Timer.SECOND * 2, this.endInvincible, this);
+            timerInvincible.start();
+            timerInvincible.start();
         }
     },
     lavaHit: function() {
-        health -= 1;
-        if (health === 2) {
-            hearts.loadTexture('heart2', 0);
+        if (!invincible) {
+            health -= 1;
+            if (health === 2) {
+                hearts.loadTexture('heart2', 0);
+            }
+            else if (health === 1) {
+                hearts.loadTexture('heart1', 0);
+            }
+            else if (health === 0) {
+                hearts.loadTexture('heart0', 0);
+                hasDied = true;
+            }
+            player.body.velocity.y = -150;
+            invincible = true;
+            timerInvincible.destroy();
+            timerInvincible = game.time.create();
+            timerEvent = timerInvincible.add(Phaser.Timer.SECOND * 2, this.endInvincible, this);
+            timerInvincible.start();
         }
-        else if (health === 1) {
-            hearts.loadTexture('heart1', 0);
-        }
-        else if (health === 0) {
-            hearts.loadTexture('heart0', 0);
-            hasDied = true;
-        }
-        player.body.velocity.y = -150;
     },
     die: function() {
         window.removeEventListener("deviceorientation", this.handleOrientation, false);
+        invincible = false;
+        jumpButton.destroy();
         if (score > highscore) {
             localStorage.setItem('highScore', score);
         }
         if (lookDirection === 'L') {
             player.animations.play('diedL', 8, false)
-            console.log("Player died watching left");
+            //console.log("Player died watching left");
             player.events.onAnimationComplete.add(function(){
-                console.log("Die animation completed");
+                //console.log("Die animation completed");
                 hasDied = false;
                 game.state.start("menu");
                 health = 3;
@@ -342,14 +395,17 @@ var startState = {
         else
         {
             player.animations.play('diedR', 8, false);
-            console.log("Player died watching right");
+            //console.log("Player died watching right");
             player.events.onAnimationComplete.add(function(){
-                console.log("Die animation completed");
+                //console.log("Die animation completed");
                 hasDied = false;
                 game.state.start("menu");
                 health = 3;
                 score = 0;
             }, animDieR);
         }
+    },
+    endInvincible: function() {
+        invincible = false;
     }
 };
