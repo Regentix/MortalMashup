@@ -1,7 +1,13 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection, landscape, platforms;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection, landscape, platforms, x, y, rndMap;
 var moving = false;
 var yHeights = [340,260,180,120];
-var spawnMap = [0,1,2,3,2,1,0,0,1,2,3,0,1,2,1,0,1,0,1,2,3];
+var platformMap = {
+    0: [0,1,2,3,2,1,0,0,1,2,3,0,1,2,1,0,1,0,1,2],
+    1: [3,2,1,0,0,1,0,3,2,1,0,2,3,0,0,1,3,2,1,0],
+    2: [0,1,2,0,1,2,0,1,2,0,1,2,0,1,2,0,1,2,0,1],
+    3: [3,2,1,2,3,2,1,0,1,2,3,2,1,0,1,2,3,2,1,2],
+    4: [0,3,2,1,3,2,1,3,2,3,1,2,3,0,1,2,0,3,2,1]
+};
 var startState = {
     create: function() {
         console.log("Game started");
@@ -18,6 +24,8 @@ var startState = {
         landscape.scale.setTo(backgroundRatio,backgroundRatio);
         landscape.fixedToCamera = true;
 
+        game.world.setBounds(0, 0, 4000, 500);
+
         fpsText = game.add.text(window.innerWidth - 44, 10, game.time.fps, {
             font: "24px Arial",
             fill: "#000"
@@ -29,6 +37,21 @@ var startState = {
         floor.anchor.setTo(0,1);
         game.physics.arcade.enable(floor);
         floor.body.immovable = true;
+
+        platforms = this.add.physicsGroup();
+
+        rndMap = game.rnd.integerInRange(0,3);
+
+        console.log("Platform spawn: map " + rndMap);
+
+        for (var i = 0, ilen = 20; i < ilen; i++) {
+            x = game.world.width / platformMap[rndMap].length * i;
+            y = yHeights[platformMap[rndMap][i]];
+            var platform = platforms.create( x , y, 'platform');
+            platform.body.immovable = true;
+            platform.anchor.setTo(1,0);
+        }
+
 
         stateButton = game.add.sprite(window.innerWidth - 10, 10, 'pause');
         stateButton.anchor.setTo(1,0);
@@ -51,16 +74,15 @@ var startState = {
 
         player = game.add.sprite(2000,game.world.centerY-50,"player");
         player.anchor.setTo(0.5);
-        //player.scale.setTo(2,2);
         game.physics.arcade.enable(player);
         player.body.gravity.y = 500;
         player.body.collideWorldBounds = true;
+        game.camera.follow(player);
 
         weapon = game.add.weapon(30, "bullet");
         weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
         weapon.bulletSpeed = 400;
         weapon.fireRate = 400;
-        weapon.trackSprite(player, 0, 0);
 
         player.animations.add('walkR', [0,1,2,3,4,5,6,7], 10, true);
         player.animations.add('walkL', [8,9,10,11,12,13,14,15], 10, true);
@@ -77,21 +99,6 @@ var startState = {
         player.animations.add('jumpR', [46], 1, false);
         player.animations.add('jumpL', [47], 1, false);
 
-        game.world.setBounds(0, 0, 4000, 500);
-        game.camera.follow(player);
-
-        platforms = this.add.physicsGroup();
-
-        var x, y;
-
-        for (var i = 0, ilen = spawnMap.length; i < ilen; i++) {
-            x = game.world.width / spawnMap.length * i;
-            y = yHeights[spawnMap[i]];
-            console.log("x: " + x + " y: " + y);
-            var platform = platforms.create( x , y, 'platform');
-            platform.body.immovable = true;
-        }
-
         window.addEventListener("deviceorientation", this.handleOrientation, false);
 
     },
@@ -102,12 +109,14 @@ var startState = {
         if (game.input.pointer1.isDown) {
             if (game.input.x > window.innerWidth / 2 && game.input.x < window.innerWidth - 161) {
                 weapon.fireAngle = 0;
+                weapon.trackSprite(player, 15, 0);
                 player.animations.play('shotR', 20, false);
                 lookDirection = 'R';
                 weapon.fire();
             } else if (game.input.x > window.innerWidth / 2 && game.input.x > window.innerWidth - 161) {
                 if (game.input.y < window.innerHeight - 85) {
                     weapon.fireAngle = 0;
+                    weapon.trackSprite(player, 15, 0);
                     player.animations.play('shotR', 20, false);
                     lookDirection = 'R';
                     weapon.fire();
@@ -115,6 +124,7 @@ var startState = {
             }
             else {
                 weapon.fireAngle = 180;
+                weapon.trackSprite(player, -15, 0);
                 player.animations.play('shotL', 20, false);
                 lookDirection = 'L';
                 weapon.fire();
@@ -124,7 +134,7 @@ var startState = {
             if (moving === false && player.body.touching.down) {
                 if (lookDirection === 'L') {
                     player.animations.play('restL', 5, true);
-                } 
+                }
                 else {
                     player.animations.play('restR', 5, true)
                 }
@@ -133,19 +143,18 @@ var startState = {
                 if (lookDirection === 'L') {
                     player.animations.play('jumpL', 1, false);
                 }
-                else 
+                else
                 {
                     player.animations.play('jumpR', 1, false);
                 }
             }
         }
-        game.physics.arcade.collide(player, this.platforms, null, null, this);
     },
     jump: function() {
         if (player.body.touching.down) {
             player.body.velocity.y = -320;
         }
-        
+
     },
     toggleState: function() {
         game.paused = !game.paused;
