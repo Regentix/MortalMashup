@@ -107,7 +107,7 @@ var startState = {
         game.physics.arcade.enable(player);
         player.body.gravity.y = 500;
         player.body.collideWorldBounds = true;
-        game.camera.follow(player);
+        game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 
         weapon = game.add.weapon(30, "bullet");
         weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
