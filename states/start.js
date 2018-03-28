@@ -5,7 +5,7 @@ var lookDirection = "R";
 var moving = false;
 var hasDied = false;
 var yHeights = [0,340,260,180,120];
-var billHeights = [380,300,220,140];
+var billHeights = [390,300,220,140,80];
 var platformMap = {
     0: [0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
     1: [0,4,0,3,0,2,0,1,0,1,0,2,0,1,0,4,0,3,0,2,0,1,0,3,0,4,0,1,0,1,0,2,0,4,0,3,0,2,0,2],
@@ -18,7 +18,7 @@ var floorMap = {
     1: [0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1],
     2: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     3: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    4: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    4: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 };
 var startState = {
     create: function() {
@@ -95,11 +95,11 @@ var startState = {
         jumpButton.fixedToCamera = true;
 
         saws = this.add.physicsGroup();
-        var saw = saws.create(2000, game.world.centerY-100, 'saw');
-        saw.body.immovable = true;
-        saw.animations.add('saw', [0,1,2], 15, true);
-        saw.animations.play('saw', 15, true);
-        saw.anchor.setTo(0.5);
+        // var saw = saws.create(2000, game.world.centerY-100, 'saw');
+        // saw.body.immovable = true;
+        // saw.animations.add('saw', [0,1,2], 15, true);
+        // saw.animations.play('saw', 15, true);
+        // saw.anchor.setTo(0.5);
 
         player = game.add.sprite(2000,game.world.centerY-50,"player");
         player.anchor.setTo(0.5);
@@ -137,23 +137,21 @@ var startState = {
         player.animations.add('jumpR', [46], 1, false);
         player.animations.add('jumpL', [47], 1, false);
 
-        // bulletbills 
         var maxBills = 5;
         var prevValue = 0;
         var bulletBills = this.add.physicsGroup();
         game.physics.arcade.enable(bulletBills);
 
 
-        for (var i = 1; i < maxBills; i++) {
+        for (var k = 1; k < maxBills; k++) {
 
-            var value = game.rnd.integerInRange(0,3);
+            var value = game.rnd.integerInRange(0,4);
             while (prevValue === value) {
-                value = game.rnd.integerInRange(0,3);
+                value = game.rnd.integerInRange(0,4);
             }
             
             var bulletBill = bulletBills.create(game.world.width, billHeights[value] , 'bill');
-            var rndVel = game.rnd.integerInRange(-150, -300);
-            bulletBill.body.velocity.x = rndVel;
+            bulletBill.body.velocity.x = game.rnd.integerInRange(-150, -300);
             bulletBill.checkWorldBounds = true;
             bulletBill.events.onOutOfBounds.add(removeBullet, this);
 
