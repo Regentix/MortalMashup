@@ -20,6 +20,7 @@ var loadState = {
         game.load.image("landscape", "./assets/world/landscape.png");
         game.load.spritesheet('player', './assets/player/Player_sheetBounds.png', 40, 60);
         game.load.spritesheet('saw', './assets/world/obstacles/saw.png', 40, 40);
+        game.load.image('platform', './assets/world/platform.png');
     },
     create: function() {
         game.state.start("menu");
