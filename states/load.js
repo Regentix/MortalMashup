@@ -12,8 +12,13 @@ var loadState = {
         game.load.image("play", "./assets/play.png");
         game.load.image("pause", "./assets/pause.png");
         game.load.image("resume", "./assets/resume.png");
+        game.load.bitmapFont('carrier_command', 'assets/fonts/carrier_command.png', 'assets/fonts/carrier_command.xml');
         game.load.image("bullet", "./assets/bullet.png");
         game.load.image("jump", "./assets/overlay/jump.png");
+        game.load.image("heart0", "./assets/overlay/heart0.png");
+        game.load.image("heart1", "./assets/overlay/heart1.png");
+        game.load.image("heart2", "./assets/overlay/heart2.png");
+        game.load.image("heart3", "./assets/overlay/heart3.png");
         game.load.image("floor", "./assets/world/floor.png");
         game.load.image("landscape", "./assets/world/landscape.png");
         game.load.spritesheet('player', './assets/player/Player_sheetBounds.png', 40, 60);

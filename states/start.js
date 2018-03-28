@@ -1,5 +1,5 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection, landscape, platforms, x, y, rndMap;
-var moving = false;
+var player, moving = false, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection = "R", landscape, platforms, x, y, rndMap;
+var score = 0, scoreText, highscore, health = 3, hearts, hasDied = false, animDieR, animDieL;
 var yHeights = [340,260,180,120];
 var platformMap = {
     0: [0,1,2,3,2,1,0,0,1,2,3,0,1,2,1,0,1,0,1,2],
@@ -12,7 +12,7 @@ var startState = {
     create: function() {
         console.log("Game started");
 
-        landscape = game.add.sprite(game.world.centerX, game.world.centerY, 'landscape');
+        landscape = game.add.sprite(window.innerWidth / 2, window.innerHeight / 2, 'landscape');
         landscape.anchor.setTo(0.5);
         var backgroundRatio;
         if(window.innerHeight > window.innerWidth) {
@@ -84,14 +84,23 @@ var startState = {
         weapon.bulletSpeed = 400;
         weapon.fireRate = 400;
 
+        hearts = game.add.sprite(10, 35, 'heart3');
+        hearts.anchor.setTo(0, 0);
+        hearts.fixedToCamera = true;
+
+        highscore = localStorage.getItem('highScore');
+        scoreText = game.add.bitmapText(10, 10, 'carrier_command', 'score:0', 15);
+        scoreText.anchor.setTo(0, 0);
+        scoreText.fixedToCamera = true;
+
         player.animations.add('walkR', [0,1,2,3,4,5,6,7], 10, true);
         player.animations.add('walkL', [8,9,10,11,12,13,14,15], 10, true);
 
         player.animations.add('restR', [16,17,18,19], 5, true);
         player.animations.add('restL', [20,21,22,23], 5, true);
 
-        player.animations.add('diedR', [24,25,26,27,28,29,30], 1, false);
-        player.animations.add('diedL', [31,32,33,34,35,36,37], 1, false);
+        animDieR = player.animations.add('diedR', [24,25,26,27,28,29,30], 1, false);
+        animDieL = player.animations.add('diedL', [31,32,33,34,35,36,37], 1, false);
 
         player.animations.add('shotR', [38,39,40,41], 10, false);
         player.animations.add('shotL', [42,43,44,45], 10, false);
@@ -106,46 +115,51 @@ var startState = {
         fpsText.setText(game.time.fps);
         game.physics.arcade.collide(player, floor);
         game.physics.arcade.collide(player, platforms, null, null, this);
-        if (game.input.pointer1.isDown) {
-            if (game.input.x > window.innerWidth / 2 && game.input.x < window.innerWidth - 161) {
-                weapon.fireAngle = 0;
-                weapon.trackSprite(player, 15, 0);
-                player.animations.play('shotR', 20, false);
-                lookDirection = 'R';
-                weapon.fire();
-            } else if (game.input.x > window.innerWidth / 2 && game.input.x > window.innerWidth - 161) {
-                if (game.input.y < window.innerHeight - 85) {
+        if (hasDied) {
+            this.die();
+        } 
+        else {
+            if (game.input.pointer1.isDown) {
+                if (game.input.x > window.innerWidth / 2 && game.input.x < window.innerWidth - 161) {
                     weapon.fireAngle = 0;
                     weapon.trackSprite(player, 15, 0);
                     player.animations.play('shotR', 20, false);
                     lookDirection = 'R';
                     weapon.fire();
+                } else if (game.input.x > window.innerWidth / 2 && game.input.x > window.innerWidth - 161) {
+                    if (game.input.y < window.innerHeight - 85) {
+                        weapon.fireAngle = 0;
+                        weapon.trackSprite(player, 15, 0);
+                        player.animations.play('shotR', 20, false);
+                        lookDirection = 'R';
+                        weapon.fire();
+                    }
+                }
+                else {
+                    weapon.fireAngle = 180;
+                    weapon.trackSprite(player, -15, 0);
+                    player.animations.play('shotL', 20, false);
+                    lookDirection = 'L';
+                    weapon.fire();
                 }
             }
             else {
-                weapon.fireAngle = 180;
-                weapon.trackSprite(player, -15, 0);
-                player.animations.play('shotL', 20, false);
-                lookDirection = 'L';
-                weapon.fire();
-            }
-        }
-        else {
-            if (moving === false && player.body.touching.down) {
-                if (lookDirection === 'L') {
-                    player.animations.play('restL', 5, true);
+                if (moving === false && player.body.touching.down) {
+                    if (lookDirection === 'L') {
+                        player.animations.play('restL', 5, true);
+                    }
+                    else {
+                        player.animations.play('restR', 5, true)
+                    }
                 }
-                else {
-                    player.animations.play('restR', 5, true)
-                }
-            }
-            if (player.body.touching.down === false) {
-                if (lookDirection === 'L') {
-                    player.animations.play('jumpL', 1, false);
-                }
-                else
-                {
-                    player.animations.play('jumpR', 1, false);
+                if (player.body.touching.down === false) {
+                    if (lookDirection === 'L') {
+                        player.animations.play('jumpL', 1, false);
+                    }
+                    else
+                    {
+                        player.animations.play('jumpR', 1, false);
+                    }
                 }
             }
         }
@@ -153,7 +167,12 @@ var startState = {
     jump: function() {
         if (player.body.touching.down) {
             player.body.velocity.y = -320;
+
+            //score += 10;
+            //scoreText.setText('Score:' + score);
+            //this.takeHit();
         }
+
 
     },
     toggleState: function() {
@@ -197,6 +216,50 @@ var startState = {
         }
         if (moving === false) {
             player.body.velocity.x = 0;
+        }
+    },
+    takeHit: function() {
+        health -= 1;
+        if (health === 2) {
+            hearts.loadTexture('heart2', 0);
+        }
+        else if (health === 1) {
+            hearts.loadTexture('heart1', 0);
+        }
+        else if (health === 0) {
+            hearts.loadTexture('heart0', 0);
+            hasDied = true;
+        }
+    },
+    die: function() {
+        window.removeEventListener("deviceorientation", this.handleOrientation, false);
+        if (score > highscore) {
+            localStorage.setItem('highScore', score);
+        }
+        if (lookDirection === 'L') {
+            player.animations.play('diedL', 8, false)
+            console.log("Player died watching left");
+            player.events.onAnimationComplete.add(function(){
+                console.log("Die animation completed");
+                hasDied = false;
+                game.state.start("menu");
+                health = 3;
+                score = 0;
+                game.world.centerX = window.innerWidth / 2;
+                game.world.centerY = window.innerHeight / 2;   
+            }, animDieL);
+        }
+        else 
+        {
+            player.animations.play('diedR', 8, false);
+            console.log("Player died watching right");
+            player.events.onAnimationComplete.add(function(){
+                console.log("Die animation completed");
+                hasDied = false;
+                game.state.start("menu");
+                health = 3;
+                score = 0;
+            }, animDieR);
         }
     }
 };
