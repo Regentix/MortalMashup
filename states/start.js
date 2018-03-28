@@ -42,12 +42,12 @@ var startState = {
 
         saws = game.add.group();
         saws.enableBody = true;
-        var saw = saws.create(1000, game.world.centerY-100, 'saw');
+        var saw = saws.create(2000, game.world.centerY-100, 'saw');
         saw.animations.add('saw', [0,1,2], 15, true);
         saw.animations.play('saw', 15, true);
         saw.anchor.setTo(0.5);
 
-        player = game.add.sprite(1000,game.world.centerY-50,"player");
+        player = game.add.sprite(2000,game.world.centerY-50,"player");
         player.anchor.setTo(0.5);
         //player.scale.setTo(2,2);
         game.physics.arcade.enable(player);
@@ -75,7 +75,7 @@ var startState = {
         player.animations.add('jumpR', [46], 1, false);
         player.animations.add('jumpL', [47], 1, false);
 
-        game.world.setBounds(0, 0, 2000, 500);
+        game.world.setBounds(0, 0, 4000, 500);
         game.camera.follow(player);
         game.physics.arcade.collide(floor, player);
 
