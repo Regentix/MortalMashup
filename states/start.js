@@ -135,8 +135,8 @@ var startState = {
         fpsText.setText(game.time.fps);
         game.physics.arcade.collide(player, platforms, null, null, this);
         game.physics.arcade.collide(player, floors, null, null, this);
-        game.physics.arcade.collide(player, lavas, this.takeHit, null, this);
-        game.physics.arcade.collide(player, saws, this.lavaHit, null, this);
+        game.physics.arcade.collide(player, lavas, this.lavaHit, null, this);
+        game.physics.arcade.collide(player, saws, this.takeHit, null, this);
 
         if (hasDied) {
             this.die();
@@ -266,7 +266,7 @@ var startState = {
             hearts.loadTexture('heart0', 0);
             hasDied = true;
         }
-        player.body.velocity.y = -100;
+        player.body.velocity.y = -150;
     },
     die: function() {
         window.removeEventListener("deviceorientation", this.handleOrientation, false);
@@ -281,9 +281,7 @@ var startState = {
                 hasDied = false;
                 game.state.start("menu");
                 health = 3;
-                score = 0;
-                game.world.centerX = window.innerWidth / 2;
-                game.world.centerY = window.innerHeight / 2;   
+                score = 0; 
             }, animDieL);
         }
         else 
