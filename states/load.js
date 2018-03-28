@@ -21,7 +21,12 @@ var loadState = {
         game.load.image("heart3", "./assets/overlay/heart3.png");
         game.load.image("floor", "./assets/world/floor.png");
         game.load.image("lava", "./assets/world/lava.png");
-        game.load.image("landscape", "./assets/world/landscape.png");
+        game.load.image("landscape", "./assets/world/landscape1.png");
+        game.load.image("landscape2", "./assets/world/landscape2.png");
+        game.load.image("landscape3", "./assets/world/landscape3.png");
+        game.load.image("landscape4", "./assets/world/landscape4.png");
+        game.load.image("landscape5", "./assets/world/landscape5.png");
+        game.load.image("landscape6", "./assets/world/landscape6.png");
         game.load.image('platform', './assets/world/platform.png');
         game.load.image("menu-background", "./assets/ui/menu-wallpaper.png");
         game.load.spritesheet('player', './assets/player/Player_sheetBounds.png', 40, 60);
