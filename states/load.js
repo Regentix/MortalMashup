@@ -20,6 +20,7 @@ var loadState = {
         game.load.image("heart2", "./assets/overlay/heart2.png");
         game.load.image("heart3", "./assets/overlay/heart3.png");
         game.load.image("floor", "./assets/world/floor.png");
+        game.load.image("lava", "./assets/world/lava.png");
         game.load.image("landscape", "./assets/world/landscape.png");
         game.load.spritesheet('player', './assets/player/Player_sheetBounds.png', 40, 60);
         game.load.spritesheet('saw', './assets/world/obstacles/saw.png', 40, 40);

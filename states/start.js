@@ -1,4 +1,4 @@
-var player, moving = false, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection = "R", landscape, platforms, x, y, rndMap;
+var player, moving = false, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection = "R", landscape, platforms, platforms, x, y, rndMap;
 var score = 0, scoreText, highscore, health = 3, hearts, hasDied = false, animDieR, animDieL;
 var yHeights = [340,260,180,120];
 var platformMap = {
@@ -7,6 +7,13 @@ var platformMap = {
     2: [0,1,2,0,1,2,0,1,2,0,1,2,0,1,2,0,1,2,0,1],
     3: [3,2,1,2,3,2,1,0,1,2,3,2,1,0,1,2,3,2,1,2],
     4: [0,3,2,1,3,2,1,3,2,3,1,2,3,0,1,2,0,3,2,1]
+};
+var floorMap = {
+    0: [0,1,0,1,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,1,0,1,0,1,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,1],
+    1: [1,1,1,0,0,1,0,1,1,1,0,1,1,0,0,1,1,1,1,0,1,1,1,0,0,1,0,1,1,1,0,1,1,0,0,1,1,1,1,0],
+    2: [0,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,1,0,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,1,1,0,1],
+    3: [1,1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,1,1,1,1,0,1,1,1,1,1,1],
+    4: [0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,1,1]
 };
 var startState = {
     create: function() {
@@ -33,14 +40,10 @@ var startState = {
         fpsText.anchor.setTo(1,0);
         fpsText.fixedToCamera = true;
 
-        floor = game.add.sprite(0, 500, 'floor');
-        floor.anchor.setTo(0,1);
-        game.physics.arcade.enable(floor);
-        floor.body.immovable = true;
-
         platforms = this.add.physicsGroup();
+        floors = this.add.physicsGroup();
 
-        rndMap = game.rnd.integerInRange(0,4);
+        rndMap = game.rnd.integerInRange(0,3);
 
         console.log("Platform spawn: map " + rndMap);
 
@@ -50,6 +53,22 @@ var startState = {
             var platform = platforms.create( x , y, 'platform');
             platform.body.immovable = true;
             platform.anchor.setTo(1,0);
+        }
+
+        rndMap = game.rnd.integerInRange(0,4);
+
+        for (var j = 0, jlen = 40; j < jlen; j++) {
+            x = 100 * j;
+            if (floorMap[rndMap][j] === 1) {
+                var floor = floors.create( x , 500, 'floor');
+                floor.body.immovable = true;
+                floor.anchor.setTo(0,1);
+            }
+            else {
+                var floor = floors.create( x , 500, 'lava');
+                floor.body.immovable = true;
+                floor.anchor.setTo(0,1);
+            }
         }
 
 
@@ -113,8 +132,8 @@ var startState = {
     },
     update: function() {
         fpsText.setText(game.time.fps);
-        game.physics.arcade.collide(player, floor);
         game.physics.arcade.collide(player, platforms, null, null, this);
+        game.physics.arcade.collide(player, floors, null, null, this);
         if (hasDied) {
             this.die();
         } 
