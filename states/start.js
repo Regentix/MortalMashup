@@ -92,9 +92,9 @@ var startState = {
                 x = 150 * i;
                 prevI++;
 
-                if (prevI == i) {
+                if (prevI === i) {
                     y = game.rnd.integerInRange(0,2);
-                    while (prevY == yRange[y]) { 
+                    while (prevY === yRange[y]) {
                         y = game.rnd.integerInRange(0,2);
                     }
                 } 
@@ -114,7 +114,6 @@ var startState = {
 
     },
     update: function() {
-        if (game.physics.arcade.collide(player, this.platforms, null, null, this));
         fpsText.setText(game.time.fps);
         game.physics.arcade.collide(player, floor);
         if (game.input.pointer1.isDown) {
@@ -157,6 +156,7 @@ var startState = {
                 }
             }
         }
+        game.physics.arcade.collide(player, this.platforms, null, null, this);
     },
     jump: function() {
         if (player.body.touching.down) {
