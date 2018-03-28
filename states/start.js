@@ -101,7 +101,7 @@ var startState = {
         // saw.animations.play('saw', 15, true);
         // saw.anchor.setTo(0.5);
 
-        player = game.add.sprite(2000,game.world.centerY-50,"player");
+        player = game.add.sprite(2000,game.world.height - 130,"player");
         player.anchor.setTo(0.5);
         game.physics.arcade.enable(player);
         player.body.gravity.y = 500;
