@@ -70,7 +70,6 @@ var startState = {
                 saw.animations.add('saw', [0,1,2], 15, true);
                 saw.animations.play('saw', 15, true);
                 saw.anchor.setTo(1.75,0.5);
-                console.log("x: " + x + " y: " + y);
             }
         }
         for (var i = 0, ilen = 40; i < ilen; i++) {
