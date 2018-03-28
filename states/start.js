@@ -1,4 +1,4 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
+var player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
 var score = 0;
 var health = 3;
 var invincible = false;
@@ -6,8 +6,8 @@ var lookDirection = "R";
 var moving = false;
 var hasDied = false;
 var billHeights = [390,300,220,140,80];
-var platformHeights = [0,340,260,180,120];
 var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4"];
+var platformHeights = [0,340,260,180,120];
 var platformMap = {
     0: [0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
     1: [0,4,0,3,0,2,0,1,0,1,0,2,0,1,0,4,0,3,0,2,0,1,0,3,0,4,0,1,0,1,0,2,0,4,0,3,0,2,0,2],
@@ -22,13 +22,19 @@ var floorMap = {
     3: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     4: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 };
-var sawHeights = [0,340,260,180,120];
 var sawMap = {
-    0: [0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
-    1: [0,4,0,3,0,2,0,1,0,1,0,2,0,1,0,4,0,3,0,2,0,1,0,3,0,4,0,1,0,1,0,2,0,4,0,3,0,2,0,2],
-    2: [0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2],
-    3: [0,4,0,3,0,2,0,3,0,4,0,3,0,2,0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,2,0,3,0,4,0,3,0,2,0,3],
-    4: [0,1,0,4,0,3,0,1,0,3,0,2,0,1,0,3,0,2,0,3,0,1,0,2,0,3,0,1,0,1,0,2,0,1,0,3,0,2,0,1]
+    0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    1: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    3: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    4: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+};
+var fireMap = {
+    0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    1: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    3: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    4: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 };
 var startState = {
     create: function() {
@@ -79,15 +85,27 @@ var startState = {
         platforms = this.add.physicsGroup();
         floors = this.add.physicsGroup();
         lavas = this.add.physicsGroup();
+        fires = this.add.physicsGroup();
 
         rndMap = game.rnd.integerInRange(0,4);
 
         console.log("Loading map " + rndMap);
 
+        for (var n = 0, nlen = 40; n < nlen; n++) {
+            if (fireMap[rndMap][n] > 0) {
+                x = 100 * n;
+                y = platformHeights[fireMap[rndMap][n]];
+                fire = fires.create(x, y, 'campfire');
+                fire.animations.add('fire', [0,1,2,3], 10, true);
+                fire.animations.play('fire', 15, true);
+                fire.scale.setTo(2);
+                fire.anchor.setTo(2,1);
+            }
+        }
         for (var m = 0, mlen = 40; m < mlen; m++) {
             if (sawMap[rndMap][m] > 0) {
                 x = 100 * m;
-                y = sawHeights[sawMap[rndMap][m]];
+                y = platformHeights[sawMap[rndMap][m]];
                 saw = saws.create(x, y, 'saw');
                 saw.body.immovable = true;
                 saw.animations.add('saw', [0,1,2], 15, true);
@@ -158,11 +176,6 @@ var startState = {
         scoreText.anchor.setTo(0, 0);
         scoreText.fixedToCamera = true;
 
-        campfire = game.add.sprite(game.world.centerX-50,game.world.centerY+100,"campfire");
-        campfire.scale.setTo(2);
-        campfire.animations.add('fire', [0,1,2,3], 10, true);
-
-
         player.animations.add('walkR', [0,1,2,3,4,5,6,7], 10, true);
         player.animations.add('walkL', [8,9,10,11,12,13,14,15], 10, true);
 
@@ -223,8 +236,6 @@ var startState = {
 
     },
     update: function() {
-
-        campfire.animations.play('fire', 10, true);
         fpsText.setText(game.time.fps);
         game.physics.arcade.collide(player, platforms, null, null, this);
         game.physics.arcade.collide(player, floors, null, null, this);
