@@ -42,6 +42,7 @@ var startState = {
 
         platforms = this.add.physicsGroup();
         floors = this.add.physicsGroup();
+        lavas = this.add.physicsGroup();
 
         rndMap = game.rnd.integerInRange(0,3);
 
@@ -65,9 +66,9 @@ var startState = {
                 floor.anchor.setTo(0,1);
             }
             else {
-                var floor = floors.create( x , 500, 'lava');
-                floor.body.immovable = true;
-                floor.anchor.setTo(0,1);
+                var lava = lavas.create( x , 500, 'lava');
+                lava.body.immovable = true;
+                lava.anchor.setTo(0,1);
             }
         }
 
@@ -134,6 +135,7 @@ var startState = {
         fpsText.setText(game.time.fps);
         game.physics.arcade.collide(player, platforms, null, null, this);
         game.physics.arcade.collide(player, floors, null, null, this);
+        game.physics.arcade.collide(player, floors, this.takeHit, null, this);
         if (hasDied) {
             this.die();
         } 
@@ -249,6 +251,7 @@ var startState = {
             hearts.loadTexture('heart0', 0);
             hasDied = true;
         }
+        player.body.velocity.y = -50;
     },
     die: function() {
         window.removeEventListener("deviceorientation", this.handleOrientation, false);
