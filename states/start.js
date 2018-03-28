@@ -1,4 +1,4 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection, landscape;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText, lookDirection, landscape,platforms, maxPlatforms;
 var moving = false;
 var startState = {
     create: function() {
@@ -77,8 +77,38 @@ var startState = {
 
         game.world.setBounds(0, 0, 2000, 500);
         game.camera.follow(player);
-
         game.physics.arcade.collide(floor, player);
+
+        this.platforms = this.add.physicsGroup();
+        this.maxPlatforms = 25;
+      
+        var yRange = [370,310,250];
+        var prevY = 0;
+        var prevI = 0;
+        
+        var x, y;
+        for (var i = 1; i < this.maxPlatforms; i++) {
+            if (game.rnd.integerInRange(1,10) < 5 ) {
+                x = 150 * i;
+                prevI++;
+
+                if (prevI == i) {
+                    y = game.rnd.integerInRange(0,2);
+                    while (prevY == yRange[y]) { 
+                        y = game.rnd.integerInRange(0,2);
+                    }
+                } 
+                    
+                else {
+                        y = 0;
+                }
+                var platform = this.platforms.create( x , yRange[y], 'platform');
+                platform.body.immovable = true;
+            }    
+            prevI = i;
+            prevY = yRange[y];
+                       
+        }
 
         window.addEventListener("deviceorientation", this.handleOrientation, false);
 
@@ -129,7 +159,7 @@ var startState = {
     },
     jump: function() {
         if (player.body.touching.down) {
-            player.body.velocity.y = -350;
+            player.body.velocity.y = -250;
         }
         
     },
