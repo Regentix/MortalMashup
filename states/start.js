@@ -1,4 +1,4 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, x, y, rndMap, cursors, floors, lavas;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, x, y, rndMap, cursors, floors, lavas, restartButton;
 var score = 0, scoreText, highscore, hearts,  animDieR, animDieL;
 var health = 3;
 var lookDirection = "R";
@@ -82,6 +82,12 @@ var startState = {
         stateButton.inputEnabled = true;
         stateButton.events.onInputDown.add(this.toggleState, this);
         stateButton.fixedToCamera = true;
+
+        restartButton = game.add.sprite(window.innerWidth - 10, 40, 'restart');
+        restartButton.anchor.setTo(1,0);
+        restartButton.inputEnabled = true;
+        restartButton.events.onInputDown.add(this.restart, this);
+        restartButton.fixedToCamera = true;
 
         jumpButton = game.add.sprite(window.innerWidth - 10, window.innerHeight - 10, 'jump');
         jumpButton.anchor.setTo(1,1);
@@ -231,11 +237,11 @@ var startState = {
             console.log("Game resumed");
         }
     },
+    restart: function () {
+        game.state.restart();
+    },
     handleOrientation: function(e) {
         gyroMovementX = e.beta;
-
-        // 3 is de grens vanaf deze hoeveelheid 'tilt' zal hij iets doen
-        // 250 is de snelheid
 
         if (gyroMovementX > 3) {
             moving = true;
