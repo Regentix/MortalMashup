@@ -242,6 +242,7 @@ var startState = {
         game.physics.arcade.collide(player, lavas, this.lavaHit, null, this);
         game.physics.arcade.collide(player, saws, this.takeHit, null, this);
         game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
+        game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
 
         switch (timerInvincible.ms) {
             case 100:
