@@ -1,4 +1,4 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, x, y, rndMap, cursors, floors, lavas, restartButton, saws;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, x, y, rndMap, cursors, floors, lavas, restartButton, saws, bulletBills;
 var score = 0, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
 var health = 3;
 var invincible = false;
@@ -143,7 +143,7 @@ var startState = {
         // bulletbills 
         var maxBills = 5;
         var prevValue = 0;
-        var bulletBills = this.add.physicsGroup();
+        bulletBills = this.add.physicsGroup();
         game.physics.arcade.enable(bulletBills);
 
 
@@ -178,34 +178,35 @@ var startState = {
         game.physics.arcade.collide(player, floors, null, null, this);
         game.physics.arcade.collide(player, lavas, this.lavaHit, null, this);
         game.physics.arcade.collide(player, saws, this.takeHit, null, this);
+        game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
 
         switch (timerInvincible.ms) {
             case 100:
-                player.tint = 0xdbdbdb;
+                player.tint = 0xff8484;
                 break;
             case 300:
                 player.tint = 0xffffff;
                 break;
             case 500:
-                player.tint = 0xdbdbdb;
+                player.tint = 0xff8484;
                 break;
             case 700:
                 player.tint = 0xffffff;
                 break;
             case 900:
-                player.tint = 0xdbdbdb;
+                player.tint = 0xff8484;
                 break;
             case 1100:
                 player.tint = 0xffffff;
                 break;
             case 1300:
-                player.tint = 0xdbdbdb;
+                player.tint = 0xff8484;
                 break;
             case 1500:
                 player.tint = 0xffffff;
                 break;
             case 1700:
-                player.tint = 0xdbdbdb;
+                player.tint = 0xff8484;
                 break;
             case 1900:
                 player.tint = 0xffffff;
