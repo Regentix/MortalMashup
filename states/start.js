@@ -85,9 +85,9 @@ var startState = {
         jumpButton.events.onInputDown.add(this.jump, this);
         jumpButton.fixedToCamera = true;
 
-        saws = game.add.group();
-        saws.body.immovable = true;
+        saws = this.add.physicsGroup();
         var saw = saws.create(2000, game.world.centerY-100, 'saw');
+        saw.body.immovable = true;
         saw.animations.add('saw', [0,1,2], 15, true);
         saw.animations.play('saw', 15, true);
         saw.anchor.setTo(0.5);
