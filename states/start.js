@@ -86,7 +86,7 @@ var startState = {
         jumpButton.fixedToCamera = true;
 
         saws = game.add.group();
-        saws.enableBody = true;
+        saws.body.immovable = true;
         var saw = saws.create(2000, game.world.centerY-100, 'saw');
         saw.animations.add('saw', [0,1,2], 15, true);
         saw.animations.play('saw', 15, true);
@@ -135,7 +135,7 @@ var startState = {
         fpsText.setText(game.time.fps);
         game.physics.arcade.collide(player, platforms, null, null, this);
         game.physics.arcade.collide(player, floors, null, null, this);
-        game.physics.arcade.collide(player, floors, this.takeHit, null, this);
+        game.physics.arcade.collide(player, lavas, this.takeHit, null, this);
         game.physics.arcade.collide(player, saws, this.takeHit, null, this);
 
         if (hasDied) {
