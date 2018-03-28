@@ -114,6 +114,7 @@ var startState = {
 
     },
     update: function() {
+        if (game.physics.arcade.collide(player, this.platforms, null, null, this));
         fpsText.setText(game.time.fps);
         game.physics.arcade.collide(player, floor);
         if (game.input.pointer1.isDown) {
