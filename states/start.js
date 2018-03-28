@@ -1,12 +1,12 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, x, y, rndMap, cursors, floors, lavas, restartButton, saws, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
 var score = 0;
 var health = 3;
 var invincible = false;
 var lookDirection = "R";
 var moving = false;
 var hasDied = false;
-var yHeights = [0,340,260,180,120];
 var billHeights = [390,300,220,140,80];
+var platformHeights = [0,340,260,180,120];
 var platformMap = {
     0: [0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
     1: [0,4,0,3,0,2,0,1,0,1,0,2,0,1,0,4,0,3,0,2,0,1,0,3,0,4,0,1,0,1,0,2,0,4,0,3,0,2,0,2],
@@ -20,6 +20,14 @@ var floorMap = {
     2: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     3: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     4: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+};
+var sawHeights = [0,340,260,180,120];
+var sawMap = {
+    0: [0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
+    1: [0,4,0,3,0,2,0,1,0,1,0,2,0,1,0,4,0,3,0,2,0,1,0,3,0,4,0,1,0,1,0,2,0,4,0,3,0,2,0,2],
+    2: [0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2],
+    3: [0,4,0,3,0,2,0,3,0,4,0,3,0,2,0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,2,0,3,0,4,0,3,0,2,0,3],
+    4: [0,1,0,4,0,3,0,1,0,3,0,2,0,1,0,3,0,2,0,3,0,1,0,2,0,3,0,1,0,1,0,2,0,1,0,3,0,2,0,1]
 };
 var startState = {
     create: function() {
@@ -44,6 +52,7 @@ var startState = {
         fpsText.anchor.setTo(1,0);
         fpsText.fixedToCamera = true;
 
+        saws = this.add.physicsGroup();
         platforms = this.add.physicsGroup();
         floors = this.add.physicsGroup();
         lavas = this.add.physicsGroup();
@@ -52,11 +61,23 @@ var startState = {
 
         console.log("Loading map " + rndMap);
 
+        for (var m = 0, mlen = 40; m < mlen; m++) {
+            if (sawMap[rndMap][m] > 0) {
+                x = 100 * m;
+                y = sawHeights[sawMap[rndMap][m]];
+                saw = saws.create(x, y, 'saw');
+                saw.body.immovable = true;
+                saw.animations.add('saw', [0,1,2], 15, true);
+                saw.animations.play('saw', 15, true);
+                saw.anchor.setTo(1.75,0.5);
+                console.log("x: " + x + " y: " + y);
+            }
+        }
         for (var i = 0, ilen = 40; i < ilen; i++) {
             if (platformMap[rndMap][i] > 0) {
                 x = 100 * i;
-                y = yHeights[platformMap[rndMap][i]];
-                var platform = platforms.create( x , y, 'platform');
+                y = platformHeights[platformMap[rndMap][i]];
+                platform = platforms.create( x , y, 'platform');
                 platform.body.immovable = true;
                 platform.anchor.setTo(1,0);
             }
@@ -76,7 +97,6 @@ var startState = {
             }
         }
 
-
         stateButton = game.add.sprite(window.innerWidth - 10, 10, 'pause');
         stateButton.anchor.setTo(1,0);
         stateButton.inputEnabled = true;
@@ -95,21 +115,11 @@ var startState = {
         jumpButton.events.onInputDown.add(this.jump, this);
         jumpButton.fixedToCamera = true;
 
-        saws = this.add.physicsGroup();
-        // var saw = saws.create(2000, game.world.centerY-100, 'saw');
-        // saw.body.immovable = true;
-        // saw.animations.add('saw', [0,1,2], 15, true);
-        // saw.animations.play('saw', 15, true);
-        // saw.anchor.setTo(0.5);
-
         player = game.add.sprite(2000,game.world.height - 130,"player");
         player.anchor.setTo(0.5);
         game.physics.arcade.enable(player);
         player.body.gravity.y = 500;
         player.body.collideWorldBounds = true;
-
-        game.camera.x = player.body.position.x;
-        game.camera.y = player.body.position.y;
         game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
 
         weapon = game.add.weapon(30, "bullet");
@@ -155,7 +165,7 @@ var startState = {
             while (prevValue === value) {
                 value = game.rnd.integerInRange(0,4);
             }
-            
+
             var bulletBill = bulletBills.create(game.world.width, billHeights[value] , 'bill');
             bulletBill.body.velocity.x = game.rnd.integerInRange(-150, -300);
             bulletBill.checkWorldBounds = true;
@@ -164,9 +174,9 @@ var startState = {
             prevValue = value;
         }
 
-    function removeBullet() {
-        bulletBill.kill();
-    }
+        function removeBullet() {
+            bulletBill.kill();
+        }
 
 
         cursors = game.input.keyboard.createCursorKeys();
@@ -180,9 +190,38 @@ var startState = {
         game.physics.arcade.collide(player, lavas, this.lavaHit, null, this);
         game.physics.arcade.collide(player, saws, this.takeHit, null, this);
         game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
-        
-        if (timerInvincible.ms > 100 && timerInvincible.ms < 2000) {
-            game.camera.flash(0xbf3b3b, 500);
+
+        switch (timerInvincible.ms) {
+            case 100:
+                player.tint = 0xff8484;
+                break;
+            case 300:
+                player.tint = 0xffffff;
+                break;
+            case 500:
+                player.tint = 0xff8484;
+                break;
+            case 700:
+                player.tint = 0xffffff;
+                break;
+            case 900:
+                player.tint = 0xff8484;
+                break;
+            case 1100:
+                player.tint = 0xffffff;
+                break;
+            case 1300:
+                player.tint = 0xff8484;
+                break;
+            case 1500:
+                player.tint = 0xffffff;
+                break;
+            case 1700:
+                player.tint = 0xff8484;
+                break;
+            case 1900:
+                player.tint = 0xffffff;
+                break;
         }
 
         if (hasDied) {
@@ -323,6 +362,7 @@ var startState = {
             timerInvincible = game.time.create();
             timerEvent = timerInvincible.add(Phaser.Timer.SECOND * 2, this.endInvincible, this);
             timerInvincible.start();
+            timerInvincible.start();
         }
     },
     lavaHit: function() {
@@ -354,7 +394,7 @@ var startState = {
             localStorage.setItem('highScore', score);
         }
         if (lookDirection === 'L') {
-            player.animations.play('diedL', 8, false)
+            player.animations.play('diedL', 8, false);
             //console.log("Player died watching left");
             player.events.onAnimationComplete.add(function(){
                 //console.log("Die animation completed");
