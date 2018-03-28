@@ -1,7 +1,20 @@
-var playButton, scoreText, highscore;
+var background, playButton, scoreText, highscore;
 var menuState = {
     create: function() {
         console.log("Entering menu");
+
+        background = game.add.sprite(window.innerWidth / 2, window.innerHeight / 2, 'menu-background');
+        background.anchor.setTo(0.5);
+
+        var backgroundRatio;
+        if(window.innerHeight > window.innerWidth) {
+            backgroundRatio = window.innerHeight/1920;
+        }
+        else {
+            backgroundRatio = window.innerWidth/1920;
+        }
+        background.scale.setTo(backgroundRatio,backgroundRatio);
+        background.fixedToCamera = true;
 
         playButton = game.add.sprite(window.innerWidth / 2, window.innerHeight / 2, 'play');
         playButton.anchor.setTo(0.5,0.5);

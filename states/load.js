@@ -10,6 +10,7 @@ var loadState = {
 
         // preload alle images/assets hier onder
         game.load.image("play", "./assets/play.png");
+        game.load.image("menu-background", "./assets/menu-wallpaper.png");
         game.load.image("pause", "./assets/pause.png");
         game.load.image("resume", "./assets/resume.png");
         game.load.bitmapFont('carrier_command', 'assets/fonts/carrier_command.png', 'assets/fonts/carrier_command.xml');
