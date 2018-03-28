@@ -79,7 +79,6 @@ var startState = {
 
         game.world.setBounds(0, 0, 4000, 500);
         game.camera.follow(player);
-        game.physics.arcade.collide(floor, player);
 
         platforms = this.add.physicsGroup();
 
@@ -99,6 +98,7 @@ var startState = {
     update: function() {
         fpsText.setText(game.time.fps);
         game.physics.arcade.collide(player, floor);
+        game.physics.arcade.collide(player, platforms, null, null, this);
         if (game.input.pointer1.isDown) {
             if (game.input.x > window.innerWidth / 2 && game.input.x < window.innerWidth - 161) {
                 weapon.fireAngle = 0;
