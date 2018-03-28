@@ -328,11 +328,13 @@ var startState = {
         {
             player.body.position.x += -7;
 
-            landscape2.tilePosition.x += 0.05;
-            landscape3.tilePosition.x += 0.35;
-            landscape4.tilePosition.x += 0.65;
-            landscape5.tilePosition.x += 0.95;
-            landscape6.tilePosition.x += 1.25;
+            if (!player.body.blocked.left && !player.body.blocked.right) {
+                landscape2.tilePosition.x += 0.05;
+                landscape3.tilePosition.x += 0.35;
+                landscape4.tilePosition.x += 0.65;
+                landscape5.tilePosition.x += 0.95;
+                landscape6.tilePosition.x += 1.25;
+            }
 
             player.animations.play('walkL', true);
             lookDirection = 'L';
@@ -342,11 +344,13 @@ var startState = {
         {
             player.body.position.x += 7;
 
-            landscape2.tilePosition.x -= 0.05;
-            landscape3.tilePosition.x -= 0.35;
-            landscape4.tilePosition.x -= 0.65;
-            landscape5.tilePosition.x -= 0.95;
-            landscape6.tilePosition.x -= 1.25;
+            if (!player.body.blocked.left && !player.body.blocked.right) {
+                landscape2.tilePosition.x -= 0.05;
+                landscape3.tilePosition.x -= 0.35;
+                landscape4.tilePosition.x -= 0.65;
+                landscape5.tilePosition.x -= 0.95;
+                landscape6.tilePosition.x -= 1.25;
+            }
 
             player.animations.play('walkR', true);
             lookDirection = 'R';
@@ -401,12 +405,14 @@ var startState = {
         if (moving === true) {
             if (gyroMovementX > 0) {
                 player.body.velocity.x = 250;
-
-                landscape2.tilePosition.x -= 0.05;
-                landscape3.tilePosition.x -= 0.35;
-                landscape4.tilePosition.x -= 0.65;
-                landscape5.tilePosition.x -= 0.95;
-                landscape6.tilePosition.x -= 1.25;
+                
+                if (!player.body.blocked.left && !player.body.blocked.right) {
+                    landscape2.tilePosition.x -= 0.05;
+                    landscape3.tilePosition.x -= 0.35;
+                    landscape4.tilePosition.x -= 0.65;
+                    landscape5.tilePosition.x -= 0.95;
+                    landscape6.tilePosition.x -= 1.25;
+                }
 
                 player.animations.play('walkR', 10, true);
                 lookDirection = 'R';
@@ -414,11 +420,13 @@ var startState = {
             else {
                 player.body.velocity.x = -250;
 
-                landscape2.tilePosition.x += 0.05;
-                landscape3.tilePosition.x += 0.35;
-                landscape4.tilePosition.x += 0.65;
-                landscape5.tilePosition.x += 0.95;
-                landscape6.tilePosition.x += 1.25;
+                if (!player.body.blocked.left && !player.body.blocked.right) {
+                    landscape2.tilePosition.x += 0.05;
+                    landscape3.tilePosition.x += 0.35;
+                    landscape4.tilePosition.x += 0.65;
+                    landscape5.tilePosition.x += 0.95;
+                    landscape6.tilePosition.x += 1.25;
+                }
 
                 player.animations.play('walkL', 10, true);
                 lookDirection = 'L';
