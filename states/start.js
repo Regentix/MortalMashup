@@ -40,7 +40,7 @@ var startState = {
 
         platforms = this.add.physicsGroup();
 
-        rndMap = game.rnd.integerInRange(0,3);
+        rndMap = game.rnd.integerInRange(0,4);
 
         console.log("Platform spawn: map " + rndMap);
 
