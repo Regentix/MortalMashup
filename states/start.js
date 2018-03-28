@@ -1,4 +1,4 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
 var score = 0;
 var health = 3;
 var invincible = false;
@@ -43,6 +43,28 @@ var startState = {
         }
         landscape.scale.setTo(backgroundRatio,backgroundRatio);
         landscape.fixedToCamera = true;
+
+        landscape2 = game.add.tileSprite(window.innerWidth / 2, window.innerHeight / 2, 1920, 1920, 'landscape2');
+        landscape3 = game.add.tileSprite(window.innerWidth / 2, window.innerHeight / 2, 1920, 1920, 'landscape3');
+        landscape4 = game.add.tileSprite(window.innerWidth / 2, window.innerHeight / 2, 1920, 1920, 'landscape4');
+        landscape5 = game.add.tileSprite(window.innerWidth / 2, window.innerHeight / 2, 1920, 1920, 'landscape5');
+        landscape6 = game.add.tileSprite(window.innerWidth / 2, window.innerHeight / 2, 1920, 1920, 'landscape6');
+        landscape2.anchor.setTo(0.5);
+        landscape3.anchor.setTo(0.5);
+        landscape4.anchor.setTo(0.5);
+        landscape5.anchor.setTo(0.5);
+        landscape6.anchor.setTo(0.5);
+
+        landscape2.scale.setTo(backgroundRatio,backgroundRatio);
+        landscape2.fixedToCamera = true;
+        landscape3.scale.setTo(backgroundRatio,backgroundRatio);
+        landscape3.fixedToCamera = true;
+        landscape4.scale.setTo(backgroundRatio,backgroundRatio);
+        landscape4.fixedToCamera = true;
+        landscape5.scale.setTo(backgroundRatio,backgroundRatio);
+        landscape5.fixedToCamera = true;
+        landscape6.scale.setTo(backgroundRatio,backgroundRatio);
+        landscape6.fixedToCamera = true;
 
         game.world.setBounds(0, 0, 4000, 500);
 
@@ -295,6 +317,12 @@ var startState = {
         {
             player.body.position.x += -7;
 
+            landscape2.tilePosition.x += 0.05;
+            landscape3.tilePosition.x += 0.35;
+            landscape4.tilePosition.x += 0.65;
+            landscape5.tilePosition.x += 0.95;
+            landscape6.tilePosition.x += 1.25;
+
             player.animations.play('walkL', true);
             lookDirection = 'L';
             standing = false;
@@ -302,6 +330,12 @@ var startState = {
         if (cursors.right.isDown)
         {
             player.body.position.x += 7;
+
+            landscape2.tilePosition.x -= 0.05;
+            landscape3.tilePosition.x -= 0.35;
+            landscape4.tilePosition.x -= 0.65;
+            landscape5.tilePosition.x -= 0.95;
+            landscape6.tilePosition.x -= 1.25;
 
             player.animations.play('walkR', true);
             lookDirection = 'R';
@@ -356,11 +390,25 @@ var startState = {
         if (moving === true) {
             if (gyroMovementX > 0) {
                 player.body.velocity.x = 250;
+
+                landscape2.tilePosition.x -= 0.05;
+                landscape3.tilePosition.x -= 0.35;
+                landscape4.tilePosition.x -= 0.65;
+                landscape5.tilePosition.x -= 0.95;
+                landscape6.tilePosition.x -= 1.25;
+
                 player.animations.play('walkR', 10, true);
                 lookDirection = 'R';
             }
             else {
                 player.body.velocity.x = -250;
+
+                landscape2.tilePosition.x += 0.05;
+                landscape3.tilePosition.x += 0.35;
+                landscape4.tilePosition.x += 0.65;
+                landscape5.tilePosition.x += 0.95;
+                landscape6.tilePosition.x += 1.25;
+
                 player.animations.play('walkL', 10, true);
                 lookDirection = 'L';
             }
