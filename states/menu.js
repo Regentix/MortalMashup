@@ -1,4 +1,4 @@
-var background, playButton, scoreText, highscore;
+var background, playButton, scoreText, highscore, gameName;
 var menuState = {
     create: function() {
         console.log("Entering menu");
@@ -24,9 +24,13 @@ var menuState = {
         
         highscore = localStorage.getItem('highScore');
         localStorage.setItem('highscore', highscore);
-        scoreText = game.add.bitmapText(10, 10, 'carrier_command', "Highscore:" + highscore, 15);
-        scoreText.tint = 0x0000;
-        scoreText.anchor.setTo(0, 0);
+        scoreText = game.add.bitmapText(window.innerWidth / 2, (window.innerHeight / 2)+100, 'carrier_command', "Highscore:" + highscore, 15);
+        scoreText.tint = 0xffffff;
+        scoreText.anchor.setTo(0.5, 0.5);
+
+        gameName = game.add.bitmapText(window.innerWidth / 2, (window.innerHeight / 2)-125, 'carrier_command', "Mortal Mashup", 30);
+        gameName.tint = 0xffffff;
+        gameName.anchor.setTo(0.5, 0.5);
     },
     start: function() {
         game.state.start('start');
