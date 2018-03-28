@@ -136,6 +136,11 @@ var startState = {
         scoreText.anchor.setTo(0, 0);
         scoreText.fixedToCamera = true;
 
+        campfire = game.add.sprite(game.world.centerX-50,game.world.centerY+100,"campfire");
+        campfire.scale.setTo(2);
+        campfire.animations.add('fire', [0,1,2,3], 10, true);
+
+
         player.animations.add('walkR', [0,1,2,3,4,5,6,7], 10, true);
         player.animations.add('walkL', [8,9,10,11,12,13,14,15], 10, true);
 
@@ -190,12 +195,14 @@ var startState = {
             tetris.body.gravity.y = 400;
         }
         }
-        
+
         cursors = game.input.keyboard.createCursorKeys();
         window.addEventListener("deviceorientation", this.handleOrientation, false);
 
     },
     update: function() {
+
+        campfire.animations.play('fire', 10, true);
         fpsText.setText(game.time.fps);
         game.physics.arcade.collide(player, platforms, null, null, this);
         game.physics.arcade.collide(player, floors, null, null, this);
