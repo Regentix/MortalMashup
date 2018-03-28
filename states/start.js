@@ -201,6 +201,9 @@ var startState = {
             player.animations.play('walkR', true);
             lookDirection = 'R';
         }
+        if (cursors.up.isDown && player.body.touching.down) {
+            player.body.velocity.y = -320;
+        }
     },
     jump: function() {
         if (player.body.touching.down) {
