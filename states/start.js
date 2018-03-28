@@ -136,7 +136,7 @@ var startState = {
         game.physics.arcade.collide(player, platforms, null, null, this);
         game.physics.arcade.collide(player, floors, null, null, this);
         game.physics.arcade.collide(player, lavas, this.takeHit, null, this);
-        game.physics.arcade.collide(player, saws, this.takeHit, null, this);
+        game.physics.arcade.collide(player, saws, this.lavaHit, null, this);
 
         if (hasDied) {
             this.die();
@@ -253,7 +253,20 @@ var startState = {
             hearts.loadTexture('heart0', 0);
             hasDied = true;
         }
-        player.body.velocity.y = -50;
+    },
+    lavaHit: function() {
+        health -= 1;
+        if (health === 2) {
+            hearts.loadTexture('heart2', 0);
+        }
+        else if (health === 1) {
+            hearts.loadTexture('heart1', 0);
+        }
+        else if (health === 0) {
+            hearts.loadTexture('heart0', 0);
+            hasDied = true;
+        }
+        player.body.velocity.y = -100;
     },
     die: function() {
         window.removeEventListener("deviceorientation", this.handleOrientation, false);
