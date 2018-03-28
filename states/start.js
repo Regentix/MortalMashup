@@ -44,7 +44,7 @@ var startState = {
         saws.enableBody = true;
         var saw = saws.create(1000, game.world.centerY-100, 'saw');
         saw.animations.add('saw', [0,1,2], 15, true);
-        saw.animations.play('saw', 15, true)
+        saw.animations.play('saw', 15, true);
         saw.anchor.setTo(0.5);
 
         player = game.add.sprite(1000,game.world.centerY-50,"player");
