@@ -1,4 +1,4 @@
-var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
+var player, stateButton, gyroMovementX, weapon, jumpButton, direction, floor, fpsText,landscape, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
 var score = 0;
 var health = 3;
 var invincible = false;
@@ -7,6 +7,7 @@ var moving = false;
 var hasDied = false;
 var billHeights = [390,300,220,140,80];
 var platformHeights = [0,340,260,180,120];
+var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4"];
 var platformMap = {
     0: [0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
     1: [0,4,0,3,0,2,0,1,0,1,0,2,0,1,0,4,0,3,0,2,0,1,0,3,0,4,0,1,0,1,0,2,0,4,0,3,0,2,0,2],
@@ -177,7 +178,19 @@ var startState = {
             bulletBill.kill();
         }
 
+        //tetris
+        game.time.events.loop(Phaser.Timer.SECOND * 2, spawn, this);   
+        function spawn() {
 
+        if (standing === true || moving === false) {
+            tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,3)]);
+            game.physics.arcade.enable(tetris);
+            tetris.anchor.setTo(0.5,0.5);
+            tetris.scale.setTo(2);
+            tetris.body.gravity.y = 400;
+        }
+        }
+        
         cursors = game.input.keyboard.createCursorKeys();
         window.addEventListener("deviceorientation", this.handleOrientation, false);
 
@@ -277,6 +290,7 @@ var startState = {
 
             player.animations.play('walkL', true);
             lookDirection = 'L';
+            standing = false;
         }
         if (cursors.right.isDown)
         {
@@ -284,9 +298,14 @@ var startState = {
 
             player.animations.play('walkR', true);
             lookDirection = 'R';
+            standing = false;
         }
         if (cursors.up.isDown && player.body.touching.down) {
             player.body.velocity.y = -320;
+            standing = false;
+        }
+        if (!cursors.left.isDown && !cursors.right.isDown && !cursors.up.isDown) {
+              standing = true;
         }
     },
     jump: function() {
