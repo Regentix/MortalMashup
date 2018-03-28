@@ -152,23 +152,20 @@ var startState = {
             while (prevValue === value) {
                 var value = game.rnd.integerInRange(0,3);
             }
-                console.log(value);
+            
+            var bulletBill = bulletBills.create(game.world.width, billHeights[value] , 'bill');
+            var rndVel = game.rnd.integerInRange(-150, -300);
+            bulletBill.body.velocity.x = rndVel;
+            bulletBill.checkWorldBounds = true;
+            bulletBill.events.onOutOfBounds.add(removeBullet, this);
 
-        var bulletBill = bulletBills.create(game.world.width, billHeights[value] , 'bill');
-        var rndVel = game.rnd.integerInRange(-150, -300);
-        bulletBill.body.velocity.x = rndVel;
-        bulletBill.checkWorldBounds = true;
-        bulletBill.events.onOutOfBounds.add(removeBullet, this);
+            prevValue = value;
+        }
 
-    prevValue = value;
-}
-
-function removeBullet(sprite, int) {
-
+    function removeBullet(sprite, int) {
         bulletBill.kill();   
         console.log(sprite);
-
-}
+    }
 
 
         cursors = game.input.keyboard.createCursorKeys();
