@@ -3,7 +3,7 @@ var player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, directi
 var floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6;
 var platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton;
 var muteButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL;
-var timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound;
+var timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound, playerX, playerY;
 var len = 40;
 var score = 0;
 var health = 3;
@@ -194,8 +194,13 @@ var startState = {
         jumpButton.events.onInputDown.add(this.jump, this);
         jumpButton.fixedToCamera = true;
 
-        player = game.add.sprite(2000,game.world.height - 130,"player");
-        player.anchor.setTo(0.5);
+        playerX = this.playerX();
+        playerY = this.playerY();
+
+        console.log("playerX: " + playerX + ", playerY: " + playerY);
+
+        player = game.add.sprite(playerX,playerY,"player");
+        player.anchor.setTo(0,1);
         game.physics.arcade.enable(player);
         player.body.gravity.y = 500;
         player.body.collideWorldBounds = true;
@@ -356,14 +361,11 @@ var startState = {
     },
     playerX: function () {
         playerSpawnCount = 0;
-        for (var p = 0; p < this.len; p++) {
+        for (var p = 0; p < len; p++) {
             if (spawnMap[rndMap][p] > 0 && playerSpawnCount === 0 ) {
                 playerSpawnCount++;
                 x = 100 * p;
                 return x;
-            }
-            else {
-                return 2000;
             }
         }
     },
@@ -372,11 +374,8 @@ var startState = {
         for (var p = 0; p < len; p++) {
             if (spawnMap[rndMap][p] > 0 && playerSpawnCount === 0) {
                 playerSpawnCount++;
-                y = platformMap[spawnMap[rndMap][p]];
+                y = platformHeights[spawnMap[rndMap][p]];
                 return y;
-            }
-            else {
-                return game.world.centerX / 2 - 100;
             }
         }
     },
