@@ -122,8 +122,8 @@ var startState = {
         fires = this.add.physicsGroup();
         ghosts = this.add.physicsGroup();
 
-        // rndMap = game.rnd.integerInRange(0,3);
-        rndMap = 0;
+        rndMap = game.rnd.integerInRange(0,3);
+        //rndMap = 0;
         console.log("Loading map " + rndMap);
         for (var i = 0; i < len; i++) {
             if (platformMap[rndMap][i] > 0) {
@@ -257,10 +257,10 @@ var startState = {
         game.physics.arcade.collide(player, floors, null, null, this);
         game.physics.arcade.collide(ghosts, ghosts, null, null, this);
         game.physics.arcade.collide(player, lavas, this.lavaHit, null, this);
-        // game.physics.arcade.collide(player, saws, this.takeHit, null, this);
-        // game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
-        // game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
-        // game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
+        game.physics.arcade.collide(player, saws, this.takeHit, null, this);
+        game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
+        game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
+        game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
         game.physics.arcade.overlap(player, fires, this.healFromFire, null, this);
         game.physics.arcade.overlap(weapon.bullets, ghosts, this.enemyHit, null, this);
 
