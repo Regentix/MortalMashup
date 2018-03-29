@@ -511,13 +511,13 @@ var startState = {
         }
 
     },
-    spawnGhost: function(ghostNumber) {
+        spawnGhost: function() {
     game.rnd.integerInRange(0,3);
 
         if (game.camera.position.x+(game.camera.width/2) < (game.camera.width/4)*3) {
                 for (var g = 0, glen = ghostNumber; g < glen; g++) {
                     if (ghosts.countLiving() < 15) {
-                        x = game.camera.position.x+game.camera.width;
+                        x = (game.camera.position.x+game.camera.width+game.rnd.integerInRange(0,1500));
                         y = spawnHeight[game.rnd.integerInRange(0, 6)];
                         ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                         ghost.body.bounce.x = 0.5;
@@ -528,7 +528,7 @@ var startState = {
         else if (game.camera.position.x+(game.camera.width/4)*3 > game.world.width-(game.camera.width/2)) {
             for (var g = 0, glen = ghostNumber; g < glen; g++) {
                 if (ghosts.countLiving() < 15) {
-                    x = game.camera.position.x;
+                    x =(game.camera.position.x-game.rnd.integerInRange(0,1500));
                     y = spawnHeight[game.rnd.integerInRange(0, 6)];
                     ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                     ghost.body.bounce.x = 0.5;
@@ -542,14 +542,14 @@ var startState = {
                     rndSpawnDirection = game.rnd.integerInRange(0,1);
                     switch (rndSpawnDirection) {
                         case 0:
-                            x = (game.camera.position.x+game.camera.width);
+                            x = (game.camera.position.x+game.camera.width+game.rnd.integerInRange(0,1500));
                             y = spawnHeight[game.rnd.integerInRange(0, 6)];
                             ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                             ghost.body.bounce.x = 0.5;
                             ghost.anchor.setTo(0,0);
                             break;
                         case 1:
-                            x = (game.camera.position.x);
+                            x = (game.camera.position.x-game.rnd.integerInRange(0,1500));
                             y = spawnHeight[game.rnd.integerInRange(0, 6)];
                             ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                             ghost.body.bounce.x = 0.5;
