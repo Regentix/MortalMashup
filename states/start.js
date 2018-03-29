@@ -6,7 +6,7 @@ var lookDirection = "R";
 var moving = false;
 var hasDied = false;
 var billHeights = [390,300,220,140,80];
-var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4"];
+var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4", "tetris-5"];
 var platformHeights = [0,340,260,180,120];
 var platformMap = {
     0: [0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
@@ -217,7 +217,7 @@ var startState = {
         function spawn() {
 
         if (standing === true || moving === false) {
-            tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,3)]);
+            tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
             game.physics.arcade.enable(tetris);
             tetris.checkWorldBounds = true;
             tetris.events.onOutOfBounds.add(removeSprite, this);
