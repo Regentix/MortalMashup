@@ -10,6 +10,8 @@ var isHealing = false;
 var billHeights = [390,300,220,140,80];
 var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4", "tetris-5"];
 var platformHeights = [0,340,260,180,120];
+var spawnHeight = [150, 190, 230, 270, 310, 350, 390];
+var ghostColors = ['ghost1', 'ghost2', 'ghost3', 'ghost4'];
 var platformMap = {
     0: [0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
     1: [0,4,0,3,0,2,0,1,0,1,0,2,0,1,0,4,0,3,0,2,0,1,0,3,0,4,0,1,0,1,0,2,0,4,0,3,0,2,0,2],
@@ -247,7 +249,7 @@ var startState = {
         game.physics.arcade.overlap(player, fire, this.healFromFire, null, this);
 
         this.spawnGhost(1);
-        ghosts.forEach(this.folowPlayer);
+        ghosts.forEach(this.followPlayer);
 
         if (hasDied) {
             this.die();
@@ -482,9 +484,6 @@ var startState = {
         invincible = false;
         player.tint = 0xffffff;
     },
-    spawnGhost: function() {
-        
-    },
     healFromFire: function() {
         latestHealingTimeStamp = game.time.now;
         if (!isHealing) {
@@ -513,14 +512,14 @@ var startState = {
 
     },
     spawnGhost: function(ghostNumber) {
-        var spawnHeight = [150, 190, 230, 270, 310, 350, 390]
-        
+ game.rnd.integerInRange(0,3);
+
         if (game.camera.position.x+(game.camera.width/2) < (game.camera.width/4)*3) {
                 for (var g = 0, glen = ghostNumber; g < glen; g++) {
                     if (ghosts.countLiving() < 15) {
                         x = game.camera.position.x+game.camera.width;
                         y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                        ghost = ghosts.create(x, y, 'ghost');
+                        ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                         ghost.body.bounce.x = 0.5;
                         ghost.anchor.setTo(0,0);
                     }
@@ -531,7 +530,7 @@ var startState = {
                 if (ghosts.countLiving() < 15) {
                     x = game.camera.position.x;
                     y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                    ghost = ghosts.create(x, y, 'ghost');
+                    ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                     ghost.body.bounce.x = 0.5;
                     ghost.anchor.setTo(1,1);
                 }
@@ -545,14 +544,14 @@ var startState = {
                         case 0:
                             x = (game.camera.position.x+game.camera.width);
                             y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                            ghost = ghosts.create(x, y, 'ghost');
+                            ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                             ghost.body.bounce.x = 0.5;
                             ghost.anchor.setTo(0,0);
                             break;
                         case 1:
                             x = (game.camera.position.x);
                             y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                            ghost = ghosts.create(x, y, 'ghost');
+                            ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                             ghost.body.bounce.x = 0.5;
                             ghost.anchor.setTo(1,1);
                             break;
@@ -561,7 +560,7 @@ var startState = {
             }
         }
     },
-    folowPlayer: function(ghost) {
+    followPlayer: function(ghost) {
         game.physics.arcade.moveToObject(ghost,player,ghostSpeed);
     }
 };
