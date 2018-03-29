@@ -1,38 +1,41 @@
-var latestHealingTimeStamp, timerHeal, player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible, ghosts;
+var player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible, ghosts;
 var score = 0;
 var health = 3;
 var invincible = false;
 var lookDirection = "R";
-var ghostSpeed = 50;
 var moving = false;
 var hasDied = false;
-var isHealing = false;
+var ghostSpeed = 50;
 var billHeights = [390,300,220,140,80];
-var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4", "tetris-5"];
+var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4"];
 var platformHeights = [0,340,260,180,120];
 var platformMap = {
     0: [0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
     1: [0,4,0,3,0,2,0,1,0,1,0,2,0,1,0,4,0,3,0,2,0,1,0,3,0,4,0,1,0,1,0,2,0,4,0,3,0,2,0,2],
     2: [0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2],
-    3: [0,1,0,2,0,3,0,4,4,0,3,0,4,0,3,0,2,2,0,1,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,2,0,0,3,3]    //Vincent
+    3: [0,4,0,3,0,2,0,3,0,4,0,3,0,2,0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,2,0,3,0,4,0,3,0,2,0,3],
+    4: [0,1,0,4,0,3,0,1,0,3,0,2,0,1,0,3,0,2,0,3,0,1,0,2,0,3,0,1,0,1,0,2,0,1,0,3,0,2,0,1]
 };
 var floorMap = {
     0: [1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1],
     1: [0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1],
     2: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    3: [1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,0,0,1,1,1,1]    //Vincent
+    3: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+    4: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 };
 var sawMap = {
     0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     1: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    3: [0,0,0,0,0,3,0,0,0,0,0,0,3,0,0,0,2,0,0,2,0,0,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,0]    //Vincent
+    3: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    4: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 };
 var fireMap = {
     0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     1: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    3: [0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,3,0]    //Vincent
+    3: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    4: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 };
 var startState = {
     create: function() {
@@ -86,7 +89,7 @@ var startState = {
         fires = this.add.physicsGroup();
         ghosts = this.add.physicsGroup();
 
-        rndMap = game.rnd.integerInRange(0,3);
+        rndMap = game.rnd.integerInRange(0,4);
 
         console.log("Loading map " + rndMap);
 
@@ -98,7 +101,7 @@ var startState = {
                 fire.animations.add('fire', [0,1,2,3], 10, true);
                 fire.animations.play('fire', 15, true);
                 fire.scale.setTo(2);
-                fire.anchor.setTo(1,1);
+                fire.anchor.setTo(2,1);
             }
         }
         for (var m = 0, mlen = 40; m < mlen; m++) {
@@ -160,6 +163,7 @@ var startState = {
         player.body.gravity.y = 500;
         player.body.collideWorldBounds = true;
         game.camera.follow(player, Phaser.Camera.FOLLOW_LOCKON, 0.1, 0.1);
+        //game.camera.follow(player);
 
         weapon = game.add.weapon(30, "bullet");
         weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
@@ -196,6 +200,7 @@ var startState = {
         var prevValue = 0;
         bulletBills = this.add.physicsGroup();
         game.physics.arcade.enable(bulletBills);
+        game.physics.arcade.enable(ghosts);
 
 
         for (var k = 1; k < maxBills; k++) {
@@ -218,8 +223,9 @@ var startState = {
         //tetris
         game.time.events.loop(Phaser.Timer.SECOND * 2, spawn, this);   
         function spawn() {
+
             if (standing === true || moving === false) {
-                tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
+                tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,3)]);
                 game.physics.arcade.enable(tetris);
                 tetris.checkWorldBounds = true;
                 tetris.events.onOutOfBounds.add(removeSprite, this);
@@ -235,16 +241,14 @@ var startState = {
     },
     update: function() {
         fpsText.setText(game.time.fps);
-
         game.physics.arcade.collide(player, platforms, null, null, this);
-        game.physics.arcade.collide(player, floors, null, null, this);
         game.physics.arcade.collide(ghosts, ghosts, null, null, this);
+        game.physics.arcade.collide(player, floors, null, null, this);
         game.physics.arcade.collide(player, lavas, this.lavaHit, null, this);
         game.physics.arcade.collide(player, saws, this.takeHit, null, this);
+        game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
         game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
         game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
-        game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
-        game.physics.arcade.overlap(player, fire, this.healFromFire, null, this);
 
         this.spawnGhost(1);
         ghosts.forEach(this.folowPlayer);
@@ -453,7 +457,7 @@ var startState = {
     },
     die: function() {
         window.removeEventListener("deviceorientation", this.handleOrientation, false);
-        invincible = false;
+        this.endInvincible;
         jumpButton.destroy();
         if (score > highscore) {
             localStorage.setItem('highScore', score);
@@ -481,36 +485,6 @@ var startState = {
     endInvincible: function() {
         invincible = false;
         player.tint = 0xffffff;
-    },
-    spawnGhost: function() {
-        
-    },
-    healFromFire: function() {
-        latestHealingTimeStamp = game.time.now;
-        if (!isHealing) {
-            isHealing = true;
-            timerHeal = game.time.create();
-            timerHeal.add(Phaser.Timer.SECOND * 2, this.healPlayer, this);
-            timerHeal.start();
-        }
-    },
-    healPlayer: function() {
-        isHealing = false;
-        if (game.time.now - latestHealingTimeStamp <= Math.ceil(game.time.physicsElapsed * 1000)) {
-            if(health < 3) {
-                console.log("Healing player");
-                if (!hasDied) {
-                    health++;
-                }
-                if (health === 2) {
-                    hearts.loadTexture('heart2', 0);
-                }
-                if (health === 3) {
-                    hearts.loadTexture('heart3', 0);
-                }
-            }
-        }
-
     },
     spawnGhost: function(ghostNumber) {
         var spawnHeight = [150, 190, 230, 270, 310, 350, 390]
@@ -564,4 +538,4 @@ var startState = {
     folowPlayer: function(ghost) {
         game.physics.arcade.moveToObject(ghost,player,ghostSpeed);
     }
-};
+}
