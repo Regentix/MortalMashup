@@ -496,6 +496,7 @@ var startState = {
     die: function() {
         console.log("You died");
         isDying = true;
+        music.stop();
         dieSound.play();
 
         window.removeEventListener("deviceorientation", this.handleOrientation, false);
