@@ -95,7 +95,7 @@ var startState = {
                 fire.animations.add('fire', [0,1,2,3], 10, true);
                 fire.animations.play('fire', 15, true);
                 fire.scale.setTo(2);
-                fire.anchor.setTo(0.75,1);
+                fire.anchor.setTo(1,1);
             }
         }
         for (var m = 0, mlen = 40; m < mlen; m++) {

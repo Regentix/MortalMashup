@@ -1,4 +1,4 @@
-var background, playButton, scoreText, highscore, gameName;
+var background, playButton, scoreText, highscore = 0, gameName;
 var menuState = {
     create: function() {
         console.log("Entering menu");
