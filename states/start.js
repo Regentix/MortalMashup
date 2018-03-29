@@ -231,6 +231,9 @@ var startState = {
             }
         }
 
+        ghostNumber = 15;
+        game.time.events.add(Phaser.Timer.SECOND * 5, this.spawnGhost, this);
+
         cursors = game.input.keyboard.createCursorKeys();
         window.addEventListener("deviceorientation", this.handleOrientation, false);
 
@@ -248,7 +251,6 @@ var startState = {
         game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
         game.physics.arcade.overlap(player, fires, this.healFromFire, null, this);
 
-        this.spawnGhost(1);
         ghosts.forEach(this.followPlayer);
 
         if (hasDied) {
@@ -511,55 +513,55 @@ var startState = {
         }
 
     },
-        spawnGhost: function() {
-    game.rnd.integerInRange(0,3);
-
-        if (game.camera.position.x+(game.camera.width/2) < (game.camera.width/4)*3) {
-                for (var g = 0, glen = ghostNumber; g < glen; g++) {
-                    if (ghosts.countLiving() < 15) {
-                        x = (game.camera.position.x+game.camera.width+game.rnd.integerInRange(0,1500));
-                        y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                        ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
-                        ghost.body.bounce.x = 0.5;
-                        ghost.anchor.setTo(0,0);
-                    }
-                 }
-        }
-        else if (game.camera.position.x+(game.camera.width/4)*3 > game.world.width-(game.camera.width/2)) {
-            for (var g = 0, glen = ghostNumber; g < glen; g++) {
-                if (ghosts.countLiving() < 15) {
-                    x =(game.camera.position.x-game.rnd.integerInRange(0,1500));
-                    y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                    ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
-                    ghost.body.bounce.x = 0.5;
-                    ghost.anchor.setTo(1,1);
-                }
-             }
-        }
-        else {
-            for (var g = 0, glen = ghostNumber; g < glen; g++) {
-                if (ghosts.countLiving() < 15) {
-                    rndSpawnDirection = game.rnd.integerInRange(0,1);
-                    switch (rndSpawnDirection) {
-                        case 0:
+    spawnGhost: function() {
+        game.rnd.integerInRange(0,3);
+    
+            if (game.camera.position.x+(game.camera.width/2) < (game.camera.width/4)*3) {
+                    for (var g = 0, glen = ghostNumber; g < glen; g++) {
+                        if (ghosts.countLiving() < 15) {
                             x = (game.camera.position.x+game.camera.width+game.rnd.integerInRange(0,1500));
                             y = spawnHeight[game.rnd.integerInRange(0, 6)];
                             ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                             ghost.body.bounce.x = 0.5;
                             ghost.anchor.setTo(0,0);
-                            break;
-                        case 1:
-                            x = (game.camera.position.x-game.rnd.integerInRange(0,1500));
-                            y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                            ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
-                            ghost.body.bounce.x = 0.5;
-                            ghost.anchor.setTo(1,1);
-                            break;
+                        }
+                     }
+            }
+            else if (game.camera.position.x+(game.camera.width/4)*3 > game.world.width-(game.camera.width/2)) {
+                for (var g = 0, glen = ghostNumber; g < glen; g++) {
+                    if (ghosts.countLiving() < 15) {
+                        x =(game.camera.position.x-game.rnd.integerInRange(0,1500));
+                        y = spawnHeight[game.rnd.integerInRange(0, 6)];
+                        ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
+                        ghost.body.bounce.x = 0.5;
+                        ghost.anchor.setTo(1,1);
+                    }
+                 }
+            }
+            else {
+                for (var g = 0, glen = ghostNumber; g < glen; g++) {
+                    if (ghosts.countLiving() < 15) {
+                        rndSpawnDirection = game.rnd.integerInRange(0,1);
+                        switch (rndSpawnDirection) {
+                            case 0:
+                                x = (game.camera.position.x+game.camera.width+game.rnd.integerInRange(0,1500));
+                                y = spawnHeight[game.rnd.integerInRange(0, 6)];
+                                ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
+                                ghost.body.bounce.x = 0.5;
+                                ghost.anchor.setTo(0,0);
+                                break;
+                            case 1:
+                                x = (game.camera.position.x-game.rnd.integerInRange(0,1500));
+                                y = spawnHeight[game.rnd.integerInRange(0, 6)];
+                                ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
+                                ghost.body.bounce.x = 0.5;
+                                ghost.anchor.setTo(1,1);
+                                break;
+                        }
                     }
                 }
             }
-        }
-    },
+        },
     followPlayer: function(ghost) {
         game.physics.arcade.moveToObject(ghost,player,ghostSpeed);
     }
