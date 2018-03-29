@@ -17,6 +17,8 @@ var loadState = {
         game.load.audio('hitSound', [ 'assets/audio/hit.mp3', 'assets/audio/hit.ogg' ]);
         game.load.image("pause", "./assets/buttons/pause.png");
         game.load.image("resume", "./assets/buttons/resume.png");
+        game.load.image("mute", "./assets/buttons/mute.png");
+        game.load.image("unmute", "./assets/buttons/unmute.png");
         game.load.image("restart", "./assets/buttons/restart.png");
         game.load.image("bullet", "./assets/enemy/bullet.png");
         game.load.image("jump", "./assets/overlay/jump.png");

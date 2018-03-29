@@ -1,4 +1,4 @@
-var enemyText, enemyLeft, ghost, rndSpawnDirection, latestHealingTimeStamp, timerHeal, player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound;
+var enemyText, enemyLeft, ghost, rndSpawnDirection, latestHealingTimeStamp, timerHeal, player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, muteButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound;
 var score = 0;
 var health = 3;
 var isMusicPlaying = false;
@@ -50,6 +50,7 @@ var startState = {
         //music.destroy();
         //music = game.add.audio('music');
         music.play();
+        music.mute = false;
         isMusicPlaying = true;
         jumpSound = game.add.audio('jumpSound');
         dieSound = game.add.audio('dieSound');
@@ -170,6 +171,12 @@ var startState = {
         restartButton.events.onInputDown.add(this.restart, this);
         restartButton.fixedToCamera = true;
 
+        muteButton = game.add.sprite(window.innerWidth - 10, 70, 'unmute');
+        muteButton.anchor.setTo(1,0);
+        muteButton.inputEnabled = true;
+        muteButton.events.onInputDown.add(this.toggleMute, this);
+        muteButton.fixedToCamera = true;
+
         jumpButton = game.add.sprite(window.innerWidth - 10, window.innerHeight - 10, 'jump');
         jumpButton.anchor.setTo(1,1);
         jumpButton.inputEnabled = true;
@@ -255,6 +262,7 @@ var startState = {
 
         cursors = game.input.keyboard.createCursorKeys();
         window.addEventListener("deviceorientation", this.handleOrientation, false);
+        invincible = false;
 
     },
     update: function() {
@@ -385,6 +393,19 @@ var startState = {
         else {
             stateButton.loadTexture('pause', 0);
             console.log("Game resumed");
+        }
+    },
+    toggleMute: function() {
+        music.mute = !music.mute;
+        if (music.mute) {
+            //music.mute = false;
+            muteButton.loadTexture('mute', 0);
+            console.log("Music playing");
+        }
+        else {
+            //music.mute = true;
+            muteButton.loadTexture('unmute', 0);
+            console.log("Music muted");
         }
     },
     restart: function () {
