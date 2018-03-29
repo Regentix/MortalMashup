@@ -244,39 +244,6 @@ var startState = {
         game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
         game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
 
-        switch (timerInvincible.ms) {
-            case 100:
-                player.tint = 0xff8484;
-                break;
-            case 300:
-                player.tint = 0xffffff;
-                break;
-            case 500:
-                player.tint = 0xff8484;
-                break;
-            case 700:
-                player.tint = 0xffffff;
-                break;
-            case 900:
-                player.tint = 0xff8484;
-                break;
-            case 1100:
-                player.tint = 0xffffff;
-                break;
-            case 1300:
-                player.tint = 0xff8484;
-                break;
-            case 1500:
-                player.tint = 0xffffff;
-                break;
-            case 1700:
-                player.tint = 0xff8484;
-                break;
-            case 1900:
-                player.tint = 0xffffff;
-                break;
-        }
-
         if (hasDied) {
             this.die();
         }
@@ -371,7 +338,6 @@ var startState = {
 
             //score += 10;
             //scoreText.setText('Score:' + score);
-            //this.takeHit();
         }
 
 
@@ -454,7 +420,7 @@ var startState = {
             timerInvincible.destroy();
             timerInvincible = game.time.create();
             timerEvent = timerInvincible.add(Phaser.Timer.SECOND * 2, this.endInvincible, this);
-            timerInvincible.start();
+            player.tint = 0xff8484;
             timerInvincible.start();
         }
     },
@@ -476,6 +442,7 @@ var startState = {
             timerInvincible.destroy();
             timerInvincible = game.time.create();
             timerEvent = timerInvincible.add(Phaser.Timer.SECOND * 2, this.endInvincible, this);
+            player.tint = 0xff8484;
             timerInvincible.start();
         }
     },
@@ -488,9 +455,7 @@ var startState = {
         }
         if (lookDirection === 'L') {
             player.animations.play('diedL', 8, false);
-            //console.log("Player died watching left");
             player.events.onAnimationComplete.add(function(){
-                //console.log("Die animation completed");
                 hasDied = false;
                 game.state.start("menu");
                 health = 3;
@@ -500,9 +465,7 @@ var startState = {
         else
         {
             player.animations.play('diedR', 8, false);
-            //console.log("Player died watching right");
             player.events.onAnimationComplete.add(function(){
-                //console.log("Die animation completed");
                 hasDied = false;
                 game.state.start("menu");
                 health = 3;
