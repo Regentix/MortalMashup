@@ -589,7 +589,7 @@ var startState = {
                     y = spawnHeight[game.rnd.integerInRange(0, 6)];
                     ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                     ghost.body.bounce.x = 0.5;
-                    ghost.anchor.setTo(0,0);
+                    ghost.anchor.setTo(0,1);
                 }
             }
         }
@@ -614,7 +614,7 @@ var startState = {
                             y = spawnHeight[game.rnd.integerInRange(0, 6)];
                             ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                             ghost.body.bounce.x = 0.5;
-                            ghost.anchor.setTo(0,0);
+                            ghost.anchor.setTo(0,1);
                             break;
                         case 1:
                             x = (game.camera.position.x-game.rnd.integerInRange(0,1500));
