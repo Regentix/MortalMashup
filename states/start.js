@@ -129,6 +129,7 @@ var startState = {
         lavas = this.add.physicsGroup();
         fires = this.add.physicsGroup();
         ghosts = this.add.physicsGroup();
+        bulletBills = this.add.physicsGroup();
 
         rndMap = game.rnd.integerInRange(0,3);
         //rndMap = 0;
@@ -251,7 +252,7 @@ var startState = {
         //tetris
         game.time.events.loop(Phaser.Timer.SECOND * 4, this.spawnTetris, this);
         game.time.events.loop(Phaser.Timer.SECOND * 1, this.checkEnemies, this);
-        game.time.events.loop(Phaser.Timer.SECOND * 10, this.checkBills, this);
+        game.time.events.loop(Phaser.Timer.SECOND * 5, this.checkBills, this);
 
         cursors = game.input.keyboard.createCursorKeys();
         window.addEventListener("deviceorientation", this.handleOrientation, false);
@@ -650,17 +651,15 @@ var startState = {
         removeWaveText: function () {
             waveText.destroy();
         },
-    followPlayer: function(ghost) {
+        followPlayer: function(ghost) {
         game.physics.arcade.moveToObject(ghost,player,ghostSpeed);
-    },
-    spawnRndBills: function() {
-        var prevValue = 0;
-        if (maxBills > 20) { maxBills = 20;}
-        if ( Math.abs(speed) > 400) { speed = -400;}
-        bulletBills = this.add.physicsGroup();
-        console.log(maxBills);
+        },
+        spawnRndBills: function() {
+            var prevValue = 0;
+            if (maxBills > 20) { maxBills = 20;}
+            if ( Math.abs(speed) > 400) { speed = -400;}
 
-        for (var k = 1; k < maxBills; k++) {
+         for (var k = 1; k < maxBills; k++) {
             var value = game.rnd.integerInRange(0,4);
             while (prevValue === value) { value = game.rnd.integerInRange(0,4);}
 
@@ -670,9 +669,9 @@ var startState = {
             bulletBill.events.onOutOfBounds.add(this.removeSprite, this);
             prevValue = value;
             distance += 0.04;
-        }
+         }
 
-    },
+        },
     removeSprite: function(sprite) {
         if (sprite.position.x < 0) {
             sprite.destroy();
