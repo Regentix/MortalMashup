@@ -490,15 +490,17 @@ var startState = {
     healPlayer: function() {
         isHealing = false;
         if (game.time.now - latestHealingTimeStamp <= Math.ceil(game.time.physicsElapsed * 1000)) {
-            console.log("Healing player");
-            if (!hasDied) {
-                health++;
-            }
-            if (health === 2) {
-                hearts.loadTexture('heart2', 0);
-            }
-            if (health === 3) {
-                hearts.loadTexture('heart3', 0);
+            if(health < 3) {
+                console.log("Healing player");
+                if (!hasDied) {
+                    health++;
+                }
+                if (health === 2) {
+                    hearts.loadTexture('heart2', 0);
+                }
+                if (health === 3) {
+                    hearts.loadTexture('heart3', 0);
+                }
             }
         }
 
