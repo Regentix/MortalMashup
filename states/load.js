@@ -34,7 +34,7 @@ var loadState = {
         game.load.image('tetris-2', './assets/enemy/tetris/tetris-2.png');
         game.load.image('tetris-3', './assets/enemy/tetris/tetris-3.png');
         game.load.image('tetris-4', './assets/enemy/tetris/tetris-4.png');
-        game.load.image('tetris-4', './assets/enemy/tetris/tetris-5.png');
+        game.load.image('tetris-5', './assets/enemy/tetris/tetris-5.png');
         game.load.image('ghost', './assets/enemy/blue.png')
 
         game.load.spritesheet('campfire', 'assets/enemy/campfire.png', 16,16);
