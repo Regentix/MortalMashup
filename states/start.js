@@ -3,12 +3,14 @@ var player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, directi
 var floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6;
 var platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton;
 var muteButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL;
-var timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound, playerX, playerY;
+var timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound, playerX, playerY, wave, waveText;
 var len = 40;
 var score = 0;
 var health = 3;
+var currentWave = 1;
 var speed = -150;
 var maxBills = 5;
+var maxGhosts = 5;
 var enemyHealth = 1;
 var ghostSpeed = 50;
 var distance = 1.00;
@@ -19,6 +21,7 @@ var moving = false;
 var isDying = false;
 var hasDied = false;
 var cleared = false;
+var clearedBills = false;
 var isHealing = false;
 var invincible = false;
 var isMusicPlaying = false;
@@ -112,8 +115,13 @@ var startState = {
         });
         fpsText.anchor.setTo(1,0);
         fpsText.fixedToCamera = true;
-        enemyLeft = game.add.bitmapText(150,10 , 'carrier_command', 'Enemies left:', 12);
+        enemyLeft = game.add.bitmapText(window.innerWidth /2, 10 , 'carrier_command', 'Enemies left:', 10);
+        enemyLeft.tint = 0x804648;
+        enemyLeft.anchor.setTo(0.5,0);
         enemyLeft.fixedToCamera = true;
+        wave = game.add.bitmapText(10,70 , 'carrier_command', 'Wave:1', 10);
+        wave.tint = 0x804648;
+        wave.fixedToCamera = true;
 
         saws = this.add.physicsGroup();
         platforms = this.add.physicsGroup();
@@ -238,12 +246,12 @@ var startState = {
         timerInvincible = game.time.create();
 
         this.spawnRndBills();
+        this.spawnGhost();
 
         //tetris
-        game.time.events.loop(Phaser.Timer.SECOND * 2, this.spawnTetris, this);
+        game.time.events.loop(Phaser.Timer.SECOND * 4, this.spawnTetris, this);
         game.time.events.loop(Phaser.Timer.SECOND * 1, this.checkEnemies, this);
-        ghostNumber = 15;
-        game.time.events.add(Phaser.Timer.SECOND * 5, this.spawnGhost, this);
+        game.time.events.loop(Phaser.Timer.SECOND * 10, this.checkBills, this);
 
         cursors = game.input.keyboard.createCursorKeys();
         window.addEventListener("deviceorientation", this.handleOrientation, false);
@@ -582,53 +590,66 @@ var startState = {
     },
     spawnGhost: function() {
         game.rnd.integerInRange(0,3);
+        waveText = game.add.bitmapText(window.innerWidth /2, window.innerWidth / 6  , 'carrier_command', 'Wave:' + currentWave, 20);
+        waveText.tint = 000000;
+        waveText.anchor.setTo(0.5);
+        waveText.fixedToCamera = true;
+        game.time.events.add(Phaser.Timer.SECOND * 3, this.removeWaveText, this);
 
-        if (game.camera.position.x+(game.camera.width/2) < (game.camera.width/4)*3) {
-            for (var g = 0, glen = ghostNumber; g < glen; g++) {
-                if (ghosts.countLiving() < 15) {
-                    x = (game.camera.position.x+game.camera.width+game.rnd.integerInRange(0,1500));
-                    y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                    ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
-                    ghost.body.bounce.x = 0.5;
-                    ghost.anchor.setTo(0,1);
-                }
-            }
-        }
-        else if (game.camera.position.x+(game.camera.width/4)*3 > game.world.width-(game.camera.width/2)) {
-            for (var g = 0, glen = ghostNumber; g < glen; g++) {
-                if (ghosts.countLiving() < 15) {
-                    x =(game.camera.position.x-game.rnd.integerInRange(0,1500));
-                    y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                    ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
-                    ghost.body.bounce.x = 0.5;
-                    ghost.anchor.setTo(1,1);
-                }
-            }
-        }
-        else {
-            for (var g = 0, glen = ghostNumber; g < glen; g++) {
-                if (ghosts.countLiving() < 15) {
-                    rndSpawnDirection = game.rnd.integerInRange(0,1);
-                    switch (rndSpawnDirection) {
-                        case 0:
+    
+            if (game.camera.position.x+(game.camera.width/2) < (game.camera.width/4)*3) {
+                    if ( maxGhosts > 50) {maxGhosts = 50;}
+                    for (var g = 0, glen = maxGhosts; g < glen; g++) {
+                        if (ghosts.countLiving() < 50) {
                             x = (game.camera.position.x+game.camera.width+game.rnd.integerInRange(0,1500));
                             y = spawnHeight[game.rnd.integerInRange(0, 6)];
                             ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                             ghost.body.bounce.x = 0.5;
-                            ghost.anchor.setTo(0,1);
-                            break;
-                        case 1:
-                            x = (game.camera.position.x-game.rnd.integerInRange(0,1500));
-                            y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                            ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
-                            ghost.body.bounce.x = 0.5;
-                            ghost.anchor.setTo(1,1);
-                            break;
+                            ghost.anchor.setTo(0,0);
+                        
+                     }
+                }
+            }
+            else if (game.camera.position.x+(game.camera.width/4)*3 > game.world.width-(game.camera.width/2)) {
+                if ( maxGhosts > 50) {maxGhosts = 50;}
+                for (var g = 0, glen = maxGhosts; g < glen; g++) {
+                    if (ghosts.countLiving() < 50) {
+                        x =(game.camera.position.x-game.rnd.integerInRange(0,1500));
+                        y = spawnHeight[game.rnd.integerInRange(0, 6)];
+                        ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
+                        ghost.body.bounce.x = 0.5;
+                        ghost.anchor.setTo(1,1);
+                    }
+                 }
+            }
+            else {
+                if ( maxGhosts > 50) {maxGhosts = 50;}
+                for (var g = 0, glen = maxGhosts; g < glen; g++) {
+                    if (ghosts.countLiving() < 50) {
+                        rndSpawnDirection = game.rnd.integerInRange(0,1);
+                        switch (rndSpawnDirection) {
+                            case 0:
+                                x = (game.camera.position.x+game.camera.width+game.rnd.integerInRange(0,1500));
+                                y = spawnHeight[game.rnd.integerInRange(0, 6)];
+                                ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
+                                ghost.body.bounce.x = 0.5;
+                                ghost.anchor.setTo(0,0);
+                                break;
+                            case 1:
+                                x = (game.camera.position.x-game.rnd.integerInRange(0,1500));
+                                y = spawnHeight[game.rnd.integerInRange(0, 6)];
+                                ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
+                                ghost.body.bounce.x = 0.5;
+                                ghost.anchor.setTo(1,1);
+                                break;
+                        }
                     }
                 }
             }
-        }
-    },
+        },
+        removeWaveText: function () {
+            waveText.destroy();
+        },
     followPlayer: function(ghost) {
         game.physics.arcade.moveToObject(ghost,player,ghostSpeed);
     },
@@ -637,6 +658,7 @@ var startState = {
         if (maxBills > 20) { maxBills = 20;}
         if ( Math.abs(speed) > 400) { speed = -400;}
         bulletBills = this.add.physicsGroup();
+        console.log(maxBills);
 
         for (var k = 1; k < maxBills; k++) {
             var value = game.rnd.integerInRange(0,4);
@@ -656,7 +678,10 @@ var startState = {
             sprite.destroy();
         }
 
-    },
+    },   
+    removeTetris: function(sprite) {
+            sprite.destroy();
+        },
     spawnTetris: function() {
         if (standing === true || moving === false) {
             tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
@@ -668,23 +693,40 @@ var startState = {
             tetris.body.gravity.y = 400;
         }
     },
-    removeTetris: function(sprite) {
-        sprite.destroy();
-    },
-    checkEnemies: function() {
-        if (bulletBills.countLiving() !== 0) {
-            totalEnemies = bulletBills.countLiving();
-            enemyLeft.setText('Enemies left:' + totalEnemies);
-        } else {
-            totalEnemies = 0;
-            enemyLeft.setText('Enemies left:' + totalEnemies);
-            cleared = true;
+
+        checkBills: function() {
+
+           if (bulletBills.countLiving() !== 0) { 
+               clearedBills = false;  
+           } else {
+               clearedBills = true;
+
+           } if (clearedBills) {
+                 distance = 1.00;
+                 speed += (-10);
+                 maxBills++; 
+                 console.log("updated max-bills" + maxBills);
+                 this.spawnRndBills();
+             }
+        },
+        checkEnemies: function() {
+
+            if (ghosts.countLiving() !== 0) {
+                totalEnemies = ghosts.countLiving();
+                enemyLeft.setText('Enemies left:' + totalEnemies); 
+            } else {
+                currentWave++;
+                totalEnemies = 0;
+                enemyLeft.setText('Enemies left:' + totalEnemies);
+                wave.setText('Wave:' + currentWave);
+                cleared = true; }
+
             if (totalEnemies == 0 && cleared) {
-                distance = 1.00;
-                speed += (-20);
-                maxBills++;
-                this.spawnRndBills();
+                 var rndValue = game.rnd.integerInRange(0,10);
+                 if ( rndValue > 2 && rndValue < 8) { maxGhosts++; }
+                 if ( rndValue > 8) { maxGhosts += 2;}
+                 this.spawnGhost();   
             }
-        }
-    },
+
+        },
 };
