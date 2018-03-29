@@ -233,6 +233,7 @@ var startState = {
     },
     update: function() {
         fpsText.setText(game.time.fps);
+
         game.physics.arcade.collide(player, platforms, null, null, this);
         game.physics.arcade.collide(player, floors, null, null, this);
         game.physics.arcade.collide(player, lavas, this.lavaHit, null, this);
