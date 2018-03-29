@@ -1,24 +1,31 @@
-var standing, enemyText, enemyLeft, ghost, rndSpawnDirection, latestHealingTimeStamp, timerHeal, player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, muteButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound;
+var standing, enemyText, enemyLeft, ghost, rndSpawnDirection, latestHealingTimeStamp, timerHeal;
+var player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction;
+var floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6;
+var platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton;
+var muteButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL;
+var timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound;
+var len = 40;
 var score = 0;
 var health = 3;
-var isMusicPlaying = false;
-var invincible = false;
-var lookDirection = "R";
+var speed = -150;
+var maxBills = 5;
+var enemyHealth = 1;
 var ghostSpeed = 50;
+var distance = 1.00;
+var totalEnemies = 0;
+var lookDirection = "R";
+var playerSpawnCount = 0;
 var moving = false;
 var isDying = false;
 var hasDied = false;
-var isHealing = false;
-var billHeights = [390,300,220,140,80];
-var maxBills = 5;
-var distance = 1.00;
-var speed = -150;
-var totalEnemies = 0;
 var cleared = false;
-var enemyHealth = 1;
-var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4", "tetris-5"];
+var isHealing = false;
+var invincible = false;
+var isMusicPlaying = false;
+var billHeights = [390,300,220,140,80];
 var platformHeights = [0,340,260,180,120];
 var spawnHeight = [150, 190, 230, 270, 310, 350, 390];
+var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4", "tetris-5"];
 var ghostColors = ['ghost1', 'ghost2', 'ghost3', 'ghost4'];
 var platformMap = {
     0: [1,2,3,0,0,3,0,2,1,3,0,2,0,1,0,1,0,1,1,1,1,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
@@ -118,30 +125,7 @@ var startState = {
         //rndMap = game.rnd.integerInRange(0,3);
         rndMap = 0;
         console.log("Loading map " + rndMap);
-
-        for (var n = 0, nlen = 40; n < nlen; n++) {
-            if (fireMap[rndMap][n] > 0) {
-                x = 100 * n;
-                y = platformHeights[fireMap[rndMap][n]];
-                fire = fires.create(x, y, 'campfire');
-                fire.animations.add('fire', [0,1,2,3], 10, true);
-                fire.animations.play('fire', 15, true);
-                fire.scale.setTo(2);
-                fire.anchor.setTo(0,1);
-            }
-        }
-        for (var m = 0, mlen = 40; m < mlen; m++) {
-            if (sawMap[rndMap][m] > 0) {
-                x = 100 * m;
-                y = platformHeights[sawMap[rndMap][m]];
-                saw = saws.create(x, y, 'saw');
-                saw.body.immovable = true;
-                saw.animations.add('saw', [0,1,2], 15, true);
-                saw.animations.play('saw', 15, true);
-                saw.anchor.setTo(-0.75,0.5);
-            }
-        }
-        for (var i = 0, ilen = 40; i < ilen; i++) {
+        for (var i = 0; i < len; i++) {
             if (platformMap[rndMap][i] > 0) {
                 x = 100 * i;
                 y = platformHeights[platformMap[rndMap][i]];
@@ -150,7 +134,7 @@ var startState = {
                 platform.anchor.setTo(0,0);
             }
         }
-        for (var j = 0, jlen = 40; j < jlen; j++) {
+        for (var j = 0; j < len; j++) {
             x = 100 * j;
             if (floorMap[rndMap][j] === 1) {
                 var floor = floors.create( x , 500, 'floor');
@@ -163,11 +147,28 @@ var startState = {
                 lava.anchor.setTo(0,1);
             }
         }
-
-        // Player spawn
-
-
-
+        for (var m = 0; m < len; m++) {
+            if (sawMap[rndMap][m] > 0) {
+                x = 100 * m;
+                y = platformHeights[sawMap[rndMap][m]];
+                saw = saws.create(x, y, 'saw');
+                saw.body.immovable = true;
+                saw.animations.add('saw', [0,1,2], 15, true);
+                saw.animations.play('saw', 15, true);
+                saw.anchor.setTo(-0.75,0.5);
+            }
+        }
+        for (var n = 0; n < len; n++) {
+            if (fireMap[rndMap][n] > 0) {
+                x = 100 * n;
+                y = platformHeights[fireMap[rndMap][n]];
+                fire = fires.create(x, y, 'campfire');
+                fire.animations.add('fire', [0,1,2,3], 10, true);
+                fire.animations.play('fire', 15, true);
+                fire.scale.setTo(2);
+                fire.anchor.setTo(0,1);
+            }
+        }
 
         stateButton = game.add.sprite(window.innerWidth - 10, 10, 'pause');
         stateButton.anchor.setTo(1,0);
@@ -213,7 +214,6 @@ var startState = {
         scoreText = game.add.bitmapText(10, 10, 'carrier_command', 'score:0', 15);
         scoreText.anchor.setTo(0, 0);
         scoreText.fixedToCamera = true;
-        scoreText.tint = 0x804648;
 
         player.animations.add('walkR', [0,1,2,3,4,5,6,7], 10, true);
         player.animations.add('walkL', [8,9,10,11,12,13,14,15], 10, true);
@@ -352,6 +352,32 @@ var startState = {
         }
         if (!cursors.left.isDown && !cursors.right.isDown && !cursors.up.isDown) {
             standing = true;
+        }
+    },
+    playerX: function () {
+        playerSpawnCount = 0;
+        for (var p = 0; p < this.len; p++) {
+            if (spawnMap[rndMap][p] > 0 && playerSpawnCount === 0 ) {
+                playerSpawnCount++;
+                x = 100 * p;
+                return x;
+            }
+            else {
+                return 2000;
+            }
+        }
+    },
+    playerY: function () {
+        playerSpawnCount = 0;
+        for (var p = 0; p < len; p++) {
+            if (spawnMap[rndMap][p] > 0 && playerSpawnCount === 0) {
+                playerSpawnCount++;
+                y = platformMap[spawnMap[rndMap][p]];
+                return y;
+            }
+            else {
+                return game.world.centerX / 2 - 100;
+            }
         }
     },
     jump: function() {
@@ -641,7 +667,7 @@ var startState = {
             tetris.body.gravity.y = 400;
         }
     },
-    removeTetris: function() {
+    removeTetris: function(sprite) {
         sprite.destroy();
     },
     checkEnemies: function() {
