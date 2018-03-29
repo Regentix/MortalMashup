@@ -15,6 +15,7 @@ var distance = 1.00;
 var speed = -150;
 var totalEnemies = 0;
 var cleared = false;
+var enemyHealth = 1;
 var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4", "tetris-5"];
 var platformHeights = [0,340,260,180,120];
 var spawnHeight = [150, 190, 230, 270, 310, 350, 390];
@@ -268,6 +269,7 @@ var startState = {
         game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
         game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
         game.physics.arcade.overlap(player, fires, this.healFromFire, null, this);
+        game.physics.arcade.overlap(weapon.bullets, ghosts, this.enemyHit, null, this);
 
         ghosts.forEach(this.followPlayer);
 
@@ -479,6 +481,16 @@ var startState = {
             hitSound.play();
             timerInvincible.start();
         }
+    },
+    enemyHit: function(bullet, enemy) {
+        enemyHealth -= 1;
+        score += 10;
+        scoreText.setText('Score:' + score);
+        
+        if (enemyHealth <= 0) {
+            enemy.destroy();
+        }
+        bullet.kill();
     },
     die: function() {
         console.log("You died");
