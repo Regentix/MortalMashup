@@ -34,9 +34,10 @@ var loadState = {
         game.load.image('tetris-2', './assets/enemy/tetris/tetris-2.png');
         game.load.image('tetris-3', './assets/enemy/tetris/tetris-3.png');
         game.load.image('tetris-4', './assets/enemy/tetris/tetris-4.png');
+        game.load.image('tetris-5', './assets/enemy/tetris/tetris-5.png');
         game.load.image('ghost', './assets/enemy/blue.png')
 
-        game.load.spritesheet('campfire', 'assets/enemy/campfire.png', 16,16);
+        game.load.spritesheet('campfire', 'assets/enemy/campfire.png', 100, 16);
         game.load.spritesheet('player', './assets/player/Player_sheetBounds.png', 40, 60);
         game.load.spritesheet('saw', './assets/world/obstacles/saw.png', 40, 40);
         game.load.bitmapFont('carrier_command', 'assets/fonts/carrier_command.png', 'assets/fonts/carrier_command.xml');
