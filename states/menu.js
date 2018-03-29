@@ -1,4 +1,4 @@
-var background, playButton, scoreText, highscore = 0, gameName, music;
+var background, playButton, scoreText, highscore = 0, gameName, music, gameScore;
 var menuState = {
     create: function() {
         console.log("Entering menu");
@@ -21,6 +21,13 @@ var menuState = {
         playButton.inputEnabled = true;
         playButton.events.onInputDown.add(this.start, this);
 
+        gameScore = localStorage.getItem('gameScore');
+        if (localStorage.getItem('gameScore') > 0) {
+            localStorage.setItem('gameScore', 0);
+            scoreText = game.add.bitmapText(window.innerWidth / 2, 25, 'carrier_command', "your score:" + gameScore, 15);
+            scoreText.tint = 0xffffff;
+            scoreText.anchor.setTo(0.5, 0.5);
+        }
         
         highscore = localStorage.getItem('highScore');
         localStorage.setItem('highscore', highscore);

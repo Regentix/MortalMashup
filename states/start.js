@@ -521,6 +521,7 @@ var startState = {
     die: function() {
         console.log("You died");
         isDying = true;
+        localStorage.setItem('gameScore', score);
         music.stop();
         dieSound.play();
 
