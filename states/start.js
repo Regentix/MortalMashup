@@ -251,17 +251,10 @@ var startState = {
         game.physics.arcade.collide(player, floors, null, null, this);
         game.physics.arcade.collide(ghosts, ghosts, null, null, this);
         game.physics.arcade.collide(player, lavas, this.lavaHit, null, this);
-<<<<<<< HEAD
-        // game.physics.arcade.collide(player, saws, this.takeHit, null, this);
-        // game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
-        // game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
-        // game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
-=======
         game.physics.arcade.collide(player, saws, this.takeHit, null, this);
         game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
         game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
         game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
->>>>>>> bea553f18937f6ee02a722623a0cbca29d334f5e
         game.physics.arcade.overlap(player, fires, this.healFromFire, null, this);
 
         ghosts.forEach(this.followPlayer);
