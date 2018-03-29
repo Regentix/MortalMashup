@@ -194,7 +194,6 @@ var startState = {
         jumpButton.events.onInputDown.add(this.jump, this);
         jumpButton.fixedToCamera = true;
 
-
         playerX = this.playerX();
         playerY = this.playerY();
 
