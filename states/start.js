@@ -1,10 +1,11 @@
-var player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
+var latestHealingTimeStamp, timerHeal, player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible;
 var score = 0;
 var health = 3;
 var invincible = false;
 var lookDirection = "R";
 var moving = false;
 var hasDied = false;
+var isHealing = false;
 var billHeights = [390,300,220,140,80];
 var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4", "tetris-5"];
 var platformHeights = [0,340,260,180,120];
@@ -239,6 +240,7 @@ var startState = {
         game.physics.arcade.collide(player, saws, this.takeHit, null, this);
         game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
         game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
+        game.physics.arcade.overlap(player, fire, this.healFromFire, null, this);
 
         if (hasDied) {
             this.die();
@@ -475,5 +477,30 @@ var startState = {
     },
     spawnGhost: function() {
         
+    },
+    healFromFire: function() {
+        latestHealingTimeStamp = game.time.now;
+        if (!isHealing) {
+            isHealing = true;
+            timerHeal = game.time.create();
+            timerHeal.add(Phaser.Timer.SECOND * 2, this.healPlayer, this);
+            timerHeal.start();
+        }
+    },
+    healPlayer: function() {
+        isHealing = false;
+        if (game.time.now - latestHealingTimeStamp <= Math.ceil(game.time.physicsElapsed * 1000)) {
+            console.log("Healing player");
+            if (!hasDied) {
+                health++;
+            }
+            if (health === 2) {
+                hearts.loadTexture('heart2', 0);
+            }
+            if (health === 3) {
+                hearts.loadTexture('heart3', 0);
+            }
+        }
+
     }
 };
