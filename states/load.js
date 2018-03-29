@@ -4,7 +4,7 @@ var loadState = {
 
         var loadingText = game.add.text(game.world.centerX, game.world.centerY, "Loading...", {
             font: "30px Arial",
-            fill: "#000"
+            fill: "#fff"
         });
         loadingText.anchor.setTo(0.5,0.5);
 

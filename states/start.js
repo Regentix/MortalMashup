@@ -1,4 +1,4 @@
-var enemyText, enemyLeft, ghost, rndSpawnDirection, latestHealingTimeStamp, timerHeal, player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, muteButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound;
+var standing, enemyText, enemyLeft, ghost, rndSpawnDirection, latestHealingTimeStamp, timerHeal, player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, muteButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound;
 var score = 0;
 var health = 3;
 var isMusicPlaying = false;
@@ -21,7 +21,7 @@ var platformHeights = [0,340,260,180,120];
 var spawnHeight = [150, 190, 230, 270, 310, 350, 390];
 var ghostColors = ['ghost1', 'ghost2', 'ghost3', 'ghost4'];
 var platformMap = {
-    0: [1,2,3,0,0,3,0,2,1,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
+    0: [1,2,3,0,0,3,0,2,1,3,0,2,0,1,0,1,0,1,1,1,1,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
     1: [0,4,0,3,0,2,0,1,0,1,0,2,0,1,0,4,0,3,0,2,0,1,0,3,0,4,0,1,0,1,0,2,0,4,0,3,0,2,0,2],
     2: [0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2],
     3: [0,1,0,2,0,3,0,4,4,0,3,0,4,0,3,0,2,2,0,1,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,2,0,0,3,3]    //Vincent
@@ -44,6 +44,12 @@ var fireMap = {
     2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     3: [0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,3,0]    //Vincent
 };
+var spawnMap = {
+    0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    1: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    3: [0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,3,0]
+}
 var startState = {
     create: function() {
         //music.stop();
@@ -109,7 +115,8 @@ var startState = {
         fires = this.add.physicsGroup();
         ghosts = this.add.physicsGroup();
 
-        rndMap = game.rnd.integerInRange(0,3);
+        //rndMap = game.rnd.integerInRange(0,3);
+        rndMap = 0;
         console.log("Loading map " + rndMap);
 
         for (var n = 0, nlen = 40; n < nlen; n++) {
@@ -143,7 +150,6 @@ var startState = {
                 platform.anchor.setTo(0,0);
             }
         }
-
         for (var j = 0, jlen = 40; j < jlen; j++) {
             x = 100 * j;
             if (floorMap[rndMap][j] === 1) {
@@ -157,6 +163,11 @@ var startState = {
                 lava.anchor.setTo(0,1);
             }
         }
+
+        // Player spawn
+
+
+
 
         stateButton = game.add.sprite(window.innerWidth - 10, 10, 'pause');
         stateButton.anchor.setTo(1,0);
@@ -202,6 +213,7 @@ var startState = {
         scoreText = game.add.bitmapText(10, 10, 'carrier_command', 'score:0', 15);
         scoreText.anchor.setTo(0, 0);
         scoreText.fixedToCamera = true;
+        scoreText.tint = 0x804648;
 
         player.animations.add('walkR', [0,1,2,3,4,5,6,7], 10, true);
         player.animations.add('walkL', [8,9,10,11,12,13,14,15], 10, true);
@@ -223,39 +235,8 @@ var startState = {
         this.spawnRndBills();
 
         //tetris
-        game.time.events.loop(Phaser.Timer.SECOND * 2, spawn, this);   
-        function spawn() {
-            if (standing === true || moving === false) {
-                tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
-                game.physics.arcade.enable(tetris);
-                tetris.checkWorldBounds = true;
-                tetris.events.onOutOfBounds.add(removeTetris, this);
-                tetris.anchor.setTo(0.5,0.5);
-                tetris.scale.setTo(2);
-                tetris.body.gravity.y = 400;
-            }
-        }
-        function removeTetris(sprite) {
-            sprite.destroy();
-        }
-
-        game.time.events.loop(Phaser.Timer.SECOND * 1, checkEnemies, this);
-        function checkEnemies() {
-            if (bulletBills.countLiving() !== 0) {
-                totalEnemies = bulletBills.countLiving();
-                enemyLeft.setText('Enemies left:' + totalEnemies); 
-            } else {
-                 totalEnemies = 0;
-                 enemyLeft.setText('Enemies left:' + totalEnemies);
-                 cleared = true; 
-              if (totalEnemies == 0 && cleared) {
-                    distance = 1.00;
-                    speed += (-20);
-                    maxBills++;
-                    this.spawnRndBills();
-                }
-              }
-        }
+        game.time.events.loop(Phaser.Timer.SECOND * 2, this.spawnTetris, this);
+        game.time.events.loop(Phaser.Timer.SECOND * 1, this.checkEnemies, this);
         ghostNumber = 15;
         game.time.events.add(Phaser.Timer.SECOND * 5, this.spawnGhost, this);
 
@@ -281,7 +262,7 @@ var startState = {
         ghosts.forEach(this.followPlayer);
 
         if (hasDied) {
-            if (isDying == false) {
+            if (isDying === false) {
                 this.die();
             }
         }
@@ -370,7 +351,7 @@ var startState = {
             standing = false;
         }
         if (!cursors.left.isDown && !cursors.right.isDown && !cursors.up.isDown) {
-              standing = true;
+            standing = true;
         }
     },
     jump: function() {
@@ -426,7 +407,7 @@ var startState = {
         if (moving === true) {
             if (gyroMovementX > 0) {
                 player.body.velocity.x = 250;
-                
+
                 if (!game.camera.atLimit.x) {
                     landscape2.tilePosition.x -= 0.05;
                     landscape3.tilePosition.x -= 0.35;
@@ -506,7 +487,7 @@ var startState = {
         enemyHealth -= 1;
         score += 10;
         scoreText.setText('Score:' + score);
-        
+
         if (enemyHealth <= 0) {
             enemy.destroy();
         }
@@ -527,7 +508,7 @@ var startState = {
             player.animations.play('diedL', 8, false);
             player.events.onAnimationComplete.add(function(){
                 hasDied = false;
-                
+
                 game.state.start("menu");
             }, animDieL);
         }
@@ -536,7 +517,7 @@ var startState = {
             player.animations.play('diedR', 8, false);
             player.events.onAnimationComplete.add(function(){
                 hasDied = false;
-                
+
                 game.state.start("menu");
             }, animDieR);
         }
@@ -574,57 +555,57 @@ var startState = {
     },
     spawnGhost: function() {
         game.rnd.integerInRange(0,3);
-    
-            if (game.camera.position.x+(game.camera.width/2) < (game.camera.width/4)*3) {
-                    for (var g = 0, glen = ghostNumber; g < glen; g++) {
-                        if (ghosts.countLiving() < 15) {
+
+        if (game.camera.position.x+(game.camera.width/2) < (game.camera.width/4)*3) {
+            for (var g = 0, glen = ghostNumber; g < glen; g++) {
+                if (ghosts.countLiving() < 15) {
+                    x = (game.camera.position.x+game.camera.width+game.rnd.integerInRange(0,1500));
+                    y = spawnHeight[game.rnd.integerInRange(0, 6)];
+                    ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
+                    ghost.body.bounce.x = 0.5;
+                    ghost.anchor.setTo(0,0);
+                }
+            }
+        }
+        else if (game.camera.position.x+(game.camera.width/4)*3 > game.world.width-(game.camera.width/2)) {
+            for (var g = 0, glen = ghostNumber; g < glen; g++) {
+                if (ghosts.countLiving() < 15) {
+                    x =(game.camera.position.x-game.rnd.integerInRange(0,1500));
+                    y = spawnHeight[game.rnd.integerInRange(0, 6)];
+                    ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
+                    ghost.body.bounce.x = 0.5;
+                    ghost.anchor.setTo(1,1);
+                }
+            }
+        }
+        else {
+            for (var g = 0, glen = ghostNumber; g < glen; g++) {
+                if (ghosts.countLiving() < 15) {
+                    rndSpawnDirection = game.rnd.integerInRange(0,1);
+                    switch (rndSpawnDirection) {
+                        case 0:
                             x = (game.camera.position.x+game.camera.width+game.rnd.integerInRange(0,1500));
                             y = spawnHeight[game.rnd.integerInRange(0, 6)];
                             ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
                             ghost.body.bounce.x = 0.5;
                             ghost.anchor.setTo(0,0);
-                        }
-                     }
-            }
-            else if (game.camera.position.x+(game.camera.width/4)*3 > game.world.width-(game.camera.width/2)) {
-                for (var g = 0, glen = ghostNumber; g < glen; g++) {
-                    if (ghosts.countLiving() < 15) {
-                        x =(game.camera.position.x-game.rnd.integerInRange(0,1500));
-                        y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                        ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
-                        ghost.body.bounce.x = 0.5;
-                        ghost.anchor.setTo(1,1);
-                    }
-                 }
-            }
-            else {
-                for (var g = 0, glen = ghostNumber; g < glen; g++) {
-                    if (ghosts.countLiving() < 15) {
-                        rndSpawnDirection = game.rnd.integerInRange(0,1);
-                        switch (rndSpawnDirection) {
-                            case 0:
-                                x = (game.camera.position.x+game.camera.width+game.rnd.integerInRange(0,1500));
-                                y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                                ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
-                                ghost.body.bounce.x = 0.5;
-                                ghost.anchor.setTo(0,0);
-                                break;
-                            case 1:
-                                x = (game.camera.position.x-game.rnd.integerInRange(0,1500));
-                                y = spawnHeight[game.rnd.integerInRange(0, 6)];
-                                ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
-                                ghost.body.bounce.x = 0.5;
-                                ghost.anchor.setTo(1,1);
-                                break;
-                        }
+                            break;
+                        case 1:
+                            x = (game.camera.position.x-game.rnd.integerInRange(0,1500));
+                            y = spawnHeight[game.rnd.integerInRange(0, 6)];
+                            ghost = ghosts.create(x, y, ghostColors[game.rnd.integerInRange(0,3)]);
+                            ghost.body.bounce.x = 0.5;
+                            ghost.anchor.setTo(1,1);
+                            break;
                     }
                 }
             }
-        },
+        }
+    },
     followPlayer: function(ghost) {
         game.physics.arcade.moveToObject(ghost,player,ghostSpeed);
     },
-    spawnRndBills: function() {       
+    spawnRndBills: function() {
         var prevValue = 0;
         if (maxBills > 20) { maxBills = 20;}
         if ( Math.abs(speed) > 400) { speed = -400;}
@@ -644,9 +625,39 @@ var startState = {
 
     },
     removeSprite: function(sprite) {
-            if (sprite.position.x < 0) {
-                sprite.destroy();
+        if (sprite.position.x < 0) {
+            sprite.destroy();
+        }
+
+    },
+    spawnTetris: function() {
+        if (standing === true || moving === false) {
+            tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
+            game.physics.arcade.enable(tetris);
+            tetris.checkWorldBounds = true;
+            tetris.events.onOutOfBounds.add(this.removeTetris, this);
+            tetris.anchor.setTo(0.5,0.5);
+            tetris.scale.setTo(2);
+            tetris.body.gravity.y = 400;
+        }
+    },
+    removeTetris: function() {
+        sprite.destroy();
+    },
+    checkEnemies: function() {
+        if (bulletBills.countLiving() !== 0) {
+            totalEnemies = bulletBills.countLiving();
+            enemyLeft.setText('Enemies left:' + totalEnemies);
+        } else {
+            totalEnemies = 0;
+            enemyLeft.setText('Enemies left:' + totalEnemies);
+            cleared = true;
+            if (totalEnemies == 0 && cleared) {
+                distance = 1.00;
+                speed += (-20);
+                maxBills++;
+                this.spawnRndBills();
             }
-        
-    }
+        }
+    },
 };
