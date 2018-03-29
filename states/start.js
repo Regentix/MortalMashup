@@ -109,8 +109,7 @@ var startState = {
         fires = this.add.physicsGroup();
         ghosts = this.add.physicsGroup();
 
-        //rndMap = game.rnd.integerInRange(0,3);
-        rndMap = 0;
+        rndMap = game.rnd.integerInRange(0,3);
         console.log("Loading map " + rndMap);
 
         for (var n = 0, nlen = 40; n < nlen; n++) {
