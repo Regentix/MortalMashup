@@ -440,26 +440,26 @@ var startState = {
         }
     },
     lavaHit: function() {
-        // if (!invincible) {
-        //     health -= 1;
-        //     if (health === 2) {
-        //         hearts.loadTexture('heart2', 0);
-        //     }
-        //     else if (health === 1) {
-        //         hearts.loadTexture('heart1', 0);
-        //     }
-        //     else if (health === 0) {
-        //         hearts.loadTexture('heart0', 0);
-        //         hasDied = true;
-        //     }
-        //     player.body.velocity.y = -150;
-        //     invincible = true;
-        //     timerInvincible.destroy();
-        //     timerInvincible = game.time.create();
-        //     timerEvent = timerInvincible.add(Phaser.Timer.SECOND * 2, this.endInvincible, this);
-        //     player.tint = 0xff8484;
-        //     timerInvincible.start();
-        // }
+        if (!invincible) {
+            health -= 1;
+            if (health === 2) {
+                hearts.loadTexture('heart2', 0);
+            }
+            else if (health === 1) {
+                hearts.loadTexture('heart1', 0);
+            }
+            else if (health === 0) {
+                hearts.loadTexture('heart0', 0);
+                hasDied = true;
+            }
+            player.body.velocity.y = -150;
+            invincible = true;
+            timerInvincible.destroy();
+            timerInvincible = game.time.create();
+            timerEvent = timerInvincible.add(Phaser.Timer.SECOND * 2, this.endInvincible, this);
+            player.tint = 0xff8484;
+            timerInvincible.start();
+        }
     },
     die: function() {
         window.removeEventListener("deviceorientation", this.handleOrientation, false);
