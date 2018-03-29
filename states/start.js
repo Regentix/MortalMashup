@@ -87,15 +87,15 @@ var startState = {
 
         console.log("Loading map " + rndMap);
 
-        for (var m = 0, mlen = 40; m < mlen; m++) {
-            if (sawMap[rndMap][m] > 0) {
-                x = 100 * m;
-                y = platformHeights[sawMap[rndMap][m]];
-                saw = saws.create(x, y, 'saw');
-                saw.body.immovable = true;
-                saw.animations.add('saw', [0,1,2], 15, true);
-                saw.animations.play('saw', 15, true);
-                saw.anchor.setTo(1.75,0.5);
+        for (var n = 0, nlen = 40; n < nlen; n++) {
+            if (fireMap[rndMap][n] > 0) {
+                x = 100 * n;
+                y = platformHeights[fireMap[rndMap][n]];
+                fire = fires.create(x, y, 'campfire');
+                fire.animations.add('fire', [0,1,2,3], 10, true);
+                fire.animations.play('fire', 15, true);
+                fire.scale.setTo(2);
+                fire.anchor.setTo(0.75,1);
             }
         }
         for (var m = 0, mlen = 40; m < mlen; m++) {
