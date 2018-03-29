@@ -29,15 +29,17 @@ var loadState = {
         game.load.image("landscape6", "./assets/world/landscape6.png");
         game.load.image('platform', './assets/world/platform.png');
         game.load.image("menu-background", "./assets/ui/menu-wallpaper.png");
-        game.load.spritesheet('player', './assets/player/Player_sheetBounds.png', 40, 60);
-        game.load.spritesheet('saw', './assets/world/obstacles/saw.png', 40, 40);
-        game.load.bitmapFont('carrier_command', 'assets/fonts/carrier_command.png', 'assets/fonts/carrier_command.xml');
         game.load.image('bill', './assets/enemy/bill.png');
         game.load.image('tetris-1', './assets/enemy/tetris/tetris-1.png');
         game.load.image('tetris-2', './assets/enemy/tetris/tetris-2.png');
         game.load.image('tetris-3', './assets/enemy/tetris/tetris-3.png');
         game.load.image('tetris-4', './assets/enemy/tetris/tetris-4.png');
+        game.load.image('ghost', './assets/enemy/blue.png')
+
         game.load.spritesheet('campfire', 'assets/enemy/campfire.png', 16,16);
+        game.load.spritesheet('player', './assets/player/Player_sheetBounds.png', 40, 60);
+        game.load.spritesheet('saw', './assets/world/obstacles/saw.png', 40, 40);
+        game.load.bitmapFont('carrier_command', 'assets/fonts/carrier_command.png', 'assets/fonts/carrier_command.xml');
     },
     create: function() {
         game.state.start("menu");

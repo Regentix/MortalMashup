@@ -476,5 +476,8 @@ var startState = {
     endInvincible: function() {
         invincible = false;
         player.tint = 0xffffff;
+    },
+    spawnGhost: function() {
+        
     }
 };
