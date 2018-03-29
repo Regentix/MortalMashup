@@ -13,7 +13,7 @@ var platformHeights = [0,340,260,180,120];
 var spawnHeight = [150, 190, 230, 270, 310, 350, 390];
 var ghostColors = ['ghost1', 'ghost2', 'ghost3', 'ghost4'];
 var platformMap = {
-    0: [0,1,0,2,0,3,0,4,0,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
+    0: [1,2,3,0,0,3,0,2,1,3,0,2,0,1,0,1,0,2,0,3,0,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
     1: [0,4,0,3,0,2,0,1,0,1,0,2,0,1,0,4,0,3,0,2,0,1,0,3,0,4,0,1,0,1,0,2,0,4,0,3,0,2,0,2],
     2: [0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2],
     3: [0,1,0,2,0,3,0,4,4,0,3,0,4,0,3,0,2,2,0,1,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,2,0,0,3,3]    //Vincent
@@ -88,8 +88,8 @@ var startState = {
         fires = this.add.physicsGroup();
         ghosts = this.add.physicsGroup();
 
-        rndMap = game.rnd.integerInRange(0,3);
-
+        //rndMap = game.rnd.integerInRange(0,3);
+        rndMap = 0;
         console.log("Loading map " + rndMap);
 
         for (var n = 0, nlen = 40; n < nlen; n++) {
@@ -100,7 +100,7 @@ var startState = {
                 fire.animations.add('fire', [0,1,2,3], 10, true);
                 fire.animations.play('fire', 15, true);
                 fire.scale.setTo(2);
-                fire.anchor.setTo(1,1);
+                fire.anchor.setTo(0,1);
             }
         }
         for (var m = 0, mlen = 40; m < mlen; m++) {
@@ -111,7 +111,7 @@ var startState = {
                 saw.body.immovable = true;
                 saw.animations.add('saw', [0,1,2], 15, true);
                 saw.animations.play('saw', 15, true);
-                saw.anchor.setTo(1.75,0.5);
+                saw.anchor.setTo(-0.75,0.5);
             }
         }
         for (var i = 0, ilen = 40; i < ilen; i++) {
@@ -120,7 +120,7 @@ var startState = {
                 y = platformHeights[platformMap[rndMap][i]];
                 platform = platforms.create( x , y, 'platform');
                 platform.body.immovable = true;
-                platform.anchor.setTo(1,0);
+                platform.anchor.setTo(0,0);
             }
         }
 
@@ -242,11 +242,11 @@ var startState = {
         game.physics.arcade.collide(player, floors, null, null, this);
         game.physics.arcade.collide(ghosts, ghosts, null, null, this);
         game.physics.arcade.collide(player, lavas, this.lavaHit, null, this);
-        game.physics.arcade.collide(player, saws, this.takeHit, null, this);
-        game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
-        game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
-        game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
-        game.physics.arcade.overlap(player, fire, this.healFromFire, null, this);
+        // game.physics.arcade.collide(player, saws, this.takeHit, null, this);
+        // game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
+        // game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
+        // game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
+        game.physics.arcade.overlap(player, fires, this.healFromFire, null, this);
 
         this.spawnGhost(1);
         ghosts.forEach(this.followPlayer);
@@ -432,26 +432,26 @@ var startState = {
         }
     },
     lavaHit: function() {
-        if (!invincible) {
-            health -= 1;
-            if (health === 2) {
-                hearts.loadTexture('heart2', 0);
-            }
-            else if (health === 1) {
-                hearts.loadTexture('heart1', 0);
-            }
-            else if (health === 0) {
-                hearts.loadTexture('heart0', 0);
-                hasDied = true;
-            }
-            player.body.velocity.y = -150;
-            invincible = true;
-            timerInvincible.destroy();
-            timerInvincible = game.time.create();
-            timerEvent = timerInvincible.add(Phaser.Timer.SECOND * 2, this.endInvincible, this);
-            player.tint = 0xff8484;
-            timerInvincible.start();
-        }
+        // if (!invincible) {
+        //     health -= 1;
+        //     if (health === 2) {
+        //         hearts.loadTexture('heart2', 0);
+        //     }
+        //     else if (health === 1) {
+        //         hearts.loadTexture('heart1', 0);
+        //     }
+        //     else if (health === 0) {
+        //         hearts.loadTexture('heart0', 0);
+        //         hasDied = true;
+        //     }
+        //     player.body.velocity.y = -150;
+        //     invincible = true;
+        //     timerInvincible.destroy();
+        //     timerInvincible = game.time.create();
+        //     timerEvent = timerInvincible.add(Phaser.Timer.SECOND * 2, this.endInvincible, this);
+        //     player.tint = 0xff8484;
+        //     timerInvincible.start();
+        // }
     },
     die: function() {
         window.removeEventListener("deviceorientation", this.handleOrientation, false);
