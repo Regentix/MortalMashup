@@ -215,16 +215,15 @@ var startState = {
         //tetris
         game.time.events.loop(Phaser.Timer.SECOND * 2, spawn, this);   
         function spawn() {
-
-        if (standing === true || moving === false) {
-            tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
-            game.physics.arcade.enable(tetris);
-            tetris.checkWorldBounds = true;
-            tetris.events.onOutOfBounds.add(removeSprite, this);
-            tetris.anchor.setTo(0.5,0.5);
-            tetris.scale.setTo(2);
-            tetris.body.gravity.y = 400;
-        }
+            if (standing === true || moving === false) {
+                tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
+                game.physics.arcade.enable(tetris);
+                tetris.checkWorldBounds = true;
+                tetris.events.onOutOfBounds.add(removeSprite, this);
+                tetris.anchor.setTo(0.5,0.5);
+                tetris.scale.setTo(2);
+                tetris.body.gravity.y = 400;
+            }
         }
 
         cursors = game.input.keyboard.createCursorKeys();
