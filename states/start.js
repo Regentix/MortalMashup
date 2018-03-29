@@ -1,4 +1,4 @@
-var ghost, rndSpawnDirection, latestHealingTimeStamp, timerHeal, player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible, ghosts, ghostNumber;
+var enemyText, enemyLeft, ghost, rndSpawnDirection, latestHealingTimeStamp, timerHeal, player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible, ghosts, ghostNumber;
 var score = 0;
 var health = 3;
 var invincible = false;
@@ -8,6 +8,11 @@ var moving = false;
 var hasDied = false;
 var isHealing = false;
 var billHeights = [390,300,220,140,80];
+var maxBills = 5;
+var distance = 1.00;
+var speed = -150;
+var totalEnemies = 0;
+var cleared = false;
 var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4", "tetris-5"];
 var platformHeights = [0,340,260,180,120];
 var spawnHeight = [150, 190, 230, 270, 310, 350, 390];
@@ -80,6 +85,8 @@ var startState = {
         });
         fpsText.anchor.setTo(1,0);
         fpsText.fixedToCamera = true;
+        enemyLeft = game.add.bitmapText(150,10 , 'carrier_command', 'Enemies left:', 12);
+        enemyLeft.fixedToCamera = true;
 
         saws = this.add.physicsGroup();
         platforms = this.add.physicsGroup();
@@ -194,28 +201,7 @@ var startState = {
 
         timerInvincible = game.time.create();
 
-        var maxBills = 5;
-        var prevValue = 0;
-        bulletBills = this.add.physicsGroup();
-        game.physics.arcade.enable(bulletBills);
-
-
-        for (var k = 1; k < maxBills; k++) {
-            var value = game.rnd.integerInRange(0,4);
-            while (prevValue === value) {
-                value = game.rnd.integerInRange(0,4);
-            }
-
-            var bulletBill = bulletBills.create(game.world.width, billHeights[value] , 'bill');
-            bulletBill.body.velocity.x = game.rnd.integerInRange(-150, -300);
-            bulletBill.checkWorldBounds = true;
-            bulletBill.events.onOutOfBounds.add(removeSprite, this);
-            prevValue = value;
-        }
-
-        function removeSprite(sprite) {
-            sprite.kill();
-        }
+        this.spawnRndBills();
 
         //tetris
         game.time.events.loop(Phaser.Timer.SECOND * 2, spawn, this);   
@@ -224,13 +210,33 @@ var startState = {
                 tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
                 game.physics.arcade.enable(tetris);
                 tetris.checkWorldBounds = true;
-                tetris.events.onOutOfBounds.add(removeSprite, this);
+                tetris.events.onOutOfBounds.add(removeTetris, this);
                 tetris.anchor.setTo(0.5,0.5);
                 tetris.scale.setTo(2);
                 tetris.body.gravity.y = 400;
             }
         }
+        function removeTetris(sprite) {
+            sprite.destroy();
+        }
 
+        game.time.events.loop(Phaser.Timer.SECOND * 1, checkEnemies, this);
+        function checkEnemies() {
+            if (bulletBills.countLiving() !== 0) {
+                totalEnemies = bulletBills.countLiving();
+                enemyLeft.setText('Enemies left:' + totalEnemies); 
+            } else {
+                 totalEnemies = 0;
+                 enemyLeft.setText('Enemies left:' + totalEnemies);
+                 cleared = true; 
+              if (totalEnemies == 0 && cleared) {
+                    distance = 1.00;
+                    speed += (-20);
+                    maxBills++;
+                    this.spawnRndBills();
+                }
+              }
+        }
         ghostNumber = 15;
         game.time.events.add(Phaser.Timer.SECOND * 5, this.spawnGhost, this);
 
@@ -564,5 +570,30 @@ var startState = {
         },
     followPlayer: function(ghost) {
         game.physics.arcade.moveToObject(ghost,player,ghostSpeed);
+    },
+    spawnRndBills: function() {       
+        var prevValue = 0;
+        if (maxBills > 20) { maxBills = 20;}
+        if ( Math.abs(speed) > 400) { speed = -400;}
+        bulletBills = this.add.physicsGroup();
+
+        for (var k = 1; k < maxBills; k++) {
+            var value = game.rnd.integerInRange(0,4);
+            while (prevValue === value) { value = game.rnd.integerInRange(0,4);}
+
+            var bulletBill = bulletBills.create(game.world.width * distance, billHeights[value] , 'bill');
+            bulletBill.body.velocity.x = speed;
+            bulletBill.checkWorldBounds = true;
+            bulletBill.events.onOutOfBounds.add(this.removeSprite, this);
+            prevValue = value;
+            distance += 0.04;
+        }
+
+    },
+    removeSprite: function(sprite) {
+            if (sprite.position.x < 0) {
+                sprite.destroy();
+            }
+        
     }
 };
