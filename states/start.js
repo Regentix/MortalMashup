@@ -83,8 +83,7 @@ var startState = {
         lavas = this.add.physicsGroup();
         fires = this.add.physicsGroup();
 
-        //rndMap = game.rnd.integerInRange(0,3);
-        rndMap = 3;
+        rndMap = game.rnd.integerInRange(0,3);
 
         console.log("Loading map " + rndMap);
 
