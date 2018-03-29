@@ -3,7 +3,7 @@ var player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, directi
 var floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6;
 var platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton;
 var muteButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL;
-var timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound;
+var timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound, playerX, playerY;
 var len = 40;
 var score = 0;
 var health = 3;
@@ -27,32 +27,32 @@ var platformHeights = [0,340,260,180,120];
 var spawnHeight = [150, 190, 230, 270, 310, 350, 390];
 var tetrisIndex = [ "tetris-1", "tetris-2", "tetris-3", "tetris-4", "tetris-5"];
 var ghostColors = ['ghost1', 'ghost2', 'ghost3', 'ghost4'];
-var platformMap = {
-    0: [1,2,3,0,0,3,0,2,1,3,0,2,0,1,0,1,0,1,1,1,1,4,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
+var platformMap = {                        // v
+    0: [1,2,3,0,0,3,0,2,1,3,0,2,0,1,0,1,0,0,0,1,1,2,0,1,0,2,0,3,0,2,0,1,0,2,0,1,0,1,0,3],
     1: [0,4,0,3,0,2,0,1,0,1,0,2,0,1,0,4,0,3,0,2,0,1,0,3,0,4,0,1,0,1,0,2,0,4,0,3,0,2,0,2],
     2: [0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,1,0,2],
     3: [0,1,0,2,0,3,0,4,4,0,3,0,4,0,3,0,2,2,0,1,0,3,0,1,0,2,0,3,0,1,0,2,0,3,0,2,0,0,3,3]    //Vincent
 };
-var floorMap = {
-    0: [1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1],
+var floorMap = {                           // v
+    0: [1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,1,1],
     1: [0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1],
     2: [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     3: [1,1,1,1,0,0,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,0,0,1,1,1,1,0,0,1,1,1,1,0,0,0,1,1,1,1]    //Vincent
 };
 var sawMap = {
-    0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     1: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     3: [0,0,0,0,0,3,0,0,0,0,0,0,3,0,0,0,2,0,0,2,0,0,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,0]    //Vincent
 };
 var fireMap = {
-    0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     1: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     3: [0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,3,0]    //Vincent
 };
 var spawnMap = {
-    0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     1: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     3: [0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,3,0]
@@ -122,7 +122,7 @@ var startState = {
         fires = this.add.physicsGroup();
         ghosts = this.add.physicsGroup();
 
-        //rndMap = game.rnd.integerInRange(0,3);
+        // rndMap = game.rnd.integerInRange(0,3);
         rndMap = 0;
         console.log("Loading map " + rndMap);
         for (var i = 0; i < len; i++) {
@@ -194,8 +194,14 @@ var startState = {
         jumpButton.events.onInputDown.add(this.jump, this);
         jumpButton.fixedToCamera = true;
 
-        player = game.add.sprite(2000,game.world.height - 130,"player");
-        player.anchor.setTo(0.5);
+
+        playerX = this.playerX();
+        playerY = this.playerY();
+
+        console.log("playerX: " + playerX + ", playerY: " + playerY);
+
+        player = game.add.sprite(playerX,playerY,"player");
+        player.anchor.setTo(0,1);
         game.physics.arcade.enable(player);
         player.body.gravity.y = 500;
         player.body.collideWorldBounds = true;
@@ -252,10 +258,10 @@ var startState = {
         game.physics.arcade.collide(player, floors, null, null, this);
         game.physics.arcade.collide(ghosts, ghosts, null, null, this);
         game.physics.arcade.collide(player, lavas, this.lavaHit, null, this);
-        game.physics.arcade.collide(player, saws, this.takeHit, null, this);
-        game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
-        game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
-        game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
+        // game.physics.arcade.collide(player, saws, this.takeHit, null, this);
+        // game.physics.arcade.overlap(player, bulletBills, this.takeHit, null, this);
+        // game.physics.arcade.overlap(player, tetris, this.takeHit, null, this);
+        // game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
         game.physics.arcade.overlap(player, fires, this.healFromFire, null, this);
         game.physics.arcade.overlap(weapon.bullets, ghosts, this.enemyHit, null, this);
 
@@ -270,7 +276,7 @@ var startState = {
             if (game.input.pointer1.isDown) {
                 if (game.input.x > window.innerWidth / 2 && game.input.x < window.innerWidth - 161) {
                     weapon.fireAngle = 0;
-                    weapon.trackSprite(player, 15, 0);
+                    weapon.trackSprite(player, 55, -30);
                     player.animations.play('shotR', 20, false);
                     lookDirection = 'R';
                     weapon.fire();
@@ -278,7 +284,7 @@ var startState = {
                 } else if (game.input.x > window.innerWidth / 2 && game.input.x > window.innerWidth - 161) {
                     if (game.input.y < window.innerHeight - 85) {
                         weapon.fireAngle = 0;
-                        weapon.trackSprite(player, 15, 0);
+                        weapon.trackSprite(player, 55, -30);
                         player.animations.play('shotR', 20, false);
                         lookDirection = 'R';
                         weapon.fire();
@@ -287,7 +293,7 @@ var startState = {
                 }
                 else {
                     weapon.fireAngle = 180;
-                    weapon.trackSprite(player, -15, 0);
+                    weapon.trackSprite(player, -15, -30);
                     player.animations.play('shotL', 20, false);
                     lookDirection = 'L';
                     weapon.fire();
@@ -356,14 +362,11 @@ var startState = {
     },
     playerX: function () {
         playerSpawnCount = 0;
-        for (var p = 0; p < this.len; p++) {
+        for (var p = 0; p < len; p++) {
             if (spawnMap[rndMap][p] > 0 && playerSpawnCount === 0 ) {
                 playerSpawnCount++;
                 x = 100 * p;
                 return x;
-            }
-            else {
-                return 2000;
             }
         }
     },
@@ -372,11 +375,8 @@ var startState = {
         for (var p = 0; p < len; p++) {
             if (spawnMap[rndMap][p] > 0 && playerSpawnCount === 0) {
                 playerSpawnCount++;
-                y = platformMap[spawnMap[rndMap][p]];
+                y = platformHeights[spawnMap[rndMap][p]];
                 return y;
-            }
-            else {
-                return game.world.centerX / 2 - 100;
             }
         }
     },
