@@ -1,10 +1,12 @@
-var enemyText, enemyLeft, ghost, rndSpawnDirection, latestHealingTimeStamp, timerHeal, player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible, ghosts, ghostNumber;
+var enemyText, enemyLeft, ghost, rndSpawnDirection, latestHealingTimeStamp, timerHeal, player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction, floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6, platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton, saws, saw, bulletBills, scoreText, highscore, hearts,  animDieR, animDieL, timerInvincible, ghosts, ghostNumber, jumpSound, dieSound, shotSound, hitSound;
 var score = 0;
 var health = 3;
+var isMusicPlaying = false;
 var invincible = false;
 var lookDirection = "R";
 var ghostSpeed = 50;
 var moving = false;
+var isDying = false;
 var hasDied = false;
 var isHealing = false;
 var billHeights = [390,300,220,140,80];
@@ -43,6 +45,16 @@ var fireMap = {
 };
 var startState = {
     create: function() {
+        //music.stop();
+        //music.destroy();
+        //music = game.add.audio('music');
+        music.play();
+        isMusicPlaying = true;
+        jumpSound = game.add.audio('jumpSound');
+        dieSound = game.add.audio('dieSound');
+        shotSound = game.add.audio('shotSound');
+        hitSound = game.add.audio('hitSound');
+
         landscape = game.add.sprite(window.innerWidth / 2, window.innerHeight / 2, 'landscape');
         landscape.anchor.setTo(0.5);
         var backgroundRatio;
@@ -260,7 +272,9 @@ var startState = {
         ghosts.forEach(this.followPlayer);
 
         if (hasDied) {
-            this.die();
+            if (isDying == false) {
+                this.die();
+            }
         }
         else {
             if (game.input.pointer1.isDown) {
@@ -270,6 +284,7 @@ var startState = {
                     player.animations.play('shotR', 20, false);
                     lookDirection = 'R';
                     weapon.fire();
+                    shotSound.play();
                 } else if (game.input.x > window.innerWidth / 2 && game.input.x > window.innerWidth - 161) {
                     if (game.input.y < window.innerHeight - 85) {
                         weapon.fireAngle = 0;
@@ -277,6 +292,7 @@ var startState = {
                         player.animations.play('shotR', 20, false);
                         lookDirection = 'R';
                         weapon.fire();
+                        shotSound.play();
                     }
                 }
                 else {
@@ -285,6 +301,7 @@ var startState = {
                     player.animations.play('shotL', 20, false);
                     lookDirection = 'L';
                     weapon.fire();
+                    shotSound.play();
                 }
             }
             else {
@@ -350,7 +367,7 @@ var startState = {
     jump: function() {
         if (player.body.touching.down) {
             player.body.velocity.y = -320;
-
+            jumpSound.play();
             //score += 10;
             //scoreText.setText('Score:' + score);
         }
@@ -436,6 +453,7 @@ var startState = {
             timerInvincible = game.time.create();
             timerEvent = timerInvincible.add(Phaser.Timer.SECOND * 2, this.endInvincible, this);
             player.tint = 0xff8484;
+            hitSound.play();
             timerInvincible.start();
         }
     },
@@ -458,10 +476,15 @@ var startState = {
             timerInvincible = game.time.create();
             timerEvent = timerInvincible.add(Phaser.Timer.SECOND * 2, this.endInvincible, this);
             player.tint = 0xff8484;
+            hitSound.play();
             timerInvincible.start();
         }
     },
     die: function() {
+        console.log("You died");
+        isDying = true;
+        dieSound.play();
+
         window.removeEventListener("deviceorientation", this.handleOrientation, false);
         invincible = false;
         jumpButton.destroy();
@@ -472,9 +495,8 @@ var startState = {
             player.animations.play('diedL', 8, false);
             player.events.onAnimationComplete.add(function(){
                 hasDied = false;
+                
                 game.state.start("menu");
-                health = 3;
-                score = 0;
             }, animDieL);
         }
         else
@@ -482,9 +504,8 @@ var startState = {
             player.animations.play('diedR', 8, false);
             player.events.onAnimationComplete.add(function(){
                 hasDied = false;
+                
                 game.state.start("menu");
-                health = 3;
-                score = 0;
             }, animDieR);
         }
     },

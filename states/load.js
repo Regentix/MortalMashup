@@ -10,6 +10,11 @@ var loadState = {
 
         // preload alle images/assets hier onder
         game.load.image("play", "./assets/buttons/play.png");
+        game.load.audio('music', [ 'assets/audio/background-music.mp3', 'assets/audio/background-music.ogg' ]);
+        game.load.audio('jumpSound', [ 'assets/audio/jump.mp3', 'assets/audio/jump.ogg' ]);
+        game.load.audio('dieSound', [ 'assets/audio/die.mp3', 'assets/audio/die.ogg' ]);
+        game.load.audio('shotSound', [ 'assets/audio/fireball.mp3', 'assets/audio/fireball.ogg' ]);
+        game.load.audio('hitSound', [ 'assets/audio/hit.mp3', 'assets/audio/hit.ogg' ]);
         game.load.image("pause", "./assets/buttons/pause.png");
         game.load.image("resume", "./assets/buttons/resume.png");
         game.load.image("restart", "./assets/buttons/restart.png");

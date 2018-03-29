@@ -1,4 +1,4 @@
-var background, playButton, scoreText, highscore = 0, gameName;
+var background, playButton, scoreText, highscore = 0, gameName, music;
 var menuState = {
     create: function() {
         console.log("Entering menu");
@@ -33,6 +33,16 @@ var menuState = {
         gameName.anchor.setTo(0.5, 0.5);
     },
     start: function() {
+        isDying = false;
+        invincible = false;
+        health = 3;
+        score = 0;
+        if (isMusicPlaying) {
+            music.stop();
+            music.destroy();
+            isMusicPlaying = false;
+        }
+        music = game.add.audio('music');
         game.state.start('start');
     }
 };
