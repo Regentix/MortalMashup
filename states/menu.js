@@ -40,6 +40,11 @@ var menuState = {
         gameName.anchor.setTo(0.5, 0.5);
     },
     start: function() {
+        speed = -150;
+        maxBills = 5;
+        maxGhosts = 5;
+        distance = 1.00;
+        currentWave = 1;
         isDying = false;
         invincible = false;
         health = 3;
