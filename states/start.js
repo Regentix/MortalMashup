@@ -216,12 +216,12 @@ var startState = {
         weapon.bulletSpeed = 400;
         weapon.fireRate = 400;
 
-        hearts = game.add.sprite(10, 35, 'heart3');
+        hearts = game.add.sprite(10, 10, 'heart3');
         hearts.anchor.setTo(0, 0);
         hearts.fixedToCamera = true;
 
         highscore = localStorage.getItem('highScore');
-        scoreText = game.add.bitmapText(10, 10, 'carrier_command', 'score:0', 10);
+        scoreText = game.add.bitmapText(10, 50, 'carrier_command', 'score:0', 10);
         scoreText.tint = 0x804648;
 
         scoreText.anchor.setTo(0, 0);
