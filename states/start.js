@@ -48,7 +48,7 @@ var sawMap = {
 };
 var fireMap = {
     0: [0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-    1: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0],   //Indy
+    1: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0],   //Indy
     2: [0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,3,0]    //Vincent
 };
 var spawnMap = {
@@ -248,6 +248,7 @@ var startState = {
         this.spawnGhost();
 
         //tetris
+        game.time.events.loop(Phaser.Timer.SECOND * 5, this.spawnTetris, this);
         game.time.events.loop(Phaser.Timer.SECOND * 1, this.checkEnemies, this);
         game.time.events.loop(Phaser.Timer.SECOND * 5, this.checkBills, this);
 
@@ -269,8 +270,6 @@ var startState = {
         game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
         game.physics.arcade.overlap(player, fires, this.healFromFire, null, this);
         game.physics.arcade.overlap(weapon.bullets, ghosts, this.enemyHit, null, this);
-
-        this.setTetrisSpawn();
 
         ghosts.forEach(this.followPlayer);
 
@@ -419,6 +418,13 @@ var startState = {
         }
     },
     restart: function () {
+         currentWave = 1;
+        speed = -150;
+        maxBills = 5;
+         maxGhosts = 5;
+        enemyHealth = 1;
+        ghostSpeed = 50; 
+        distance = 1.00;
         game.state.restart();
     },
     handleOrientation: function(e) {
@@ -695,18 +701,15 @@ var startState = {
         }
     },
     spawnTetris: function() {
-        if (game.time.now - lastTetrisSpawnTime <= 100) {
-            console.log
-            if (standing || !moving || isSpawning) {
-                isSpawning = false;
-                tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
-                game.physics.arcade.enable(tetris);
-                tetris.checkWorldBounds = true;
-                tetris.events.onOutOfBounds.add(this.removeTetris, this);
-                tetris.anchor.setTo(0.5,0.5);
-                tetris.scale.setTo(2);
-                tetris.body.gravity.y = 250;
-            }
+        if (standing || !moving || isSpawning) {
+            isSpawning = false;
+            tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
+            game.physics.arcade.enable(tetris);
+            tetris.checkWorldBounds = true;
+            tetris.events.onOutOfBounds.add(this.removeTetris, this);
+            tetris.anchor.setTo(0.5,0.5);
+            tetris.scale.setTo(2);
+            tetris.body.gravity.y = 250;
         }
     },
     checkBills: function() {
