@@ -1,4 +1,4 @@
-var standing, enemyText, enemyLeft, ghost, rndSpawnDirection, latestHealingTimeStamp, timerHeal;
+var isSpawning, lastTetrisSpawnTime, timerSpawn, standing, enemyText, enemyLeft, ghost, rndSpawnDirection, latestHealingTimeStamp, timerHeal;
 var player, stateButton, gyroMovementX, fires, fire, weapon, jumpButton, direction;
 var floor, fpsText,landscape, landscape2, landscape3, landscape4, landscape5, landscape6;
 var platforms, tetris, platform, x, y, rndMap, cursors, floors, lavas, restartButton;
@@ -250,7 +250,6 @@ var startState = {
         this.spawnGhost();
 
         //tetris
-        game.time.events.loop(Phaser.Timer.SECOND * 4, this.spawnTetris, this);
         game.time.events.loop(Phaser.Timer.SECOND * 1, this.checkEnemies, this);
         game.time.events.loop(Phaser.Timer.SECOND * 5, this.checkBills, this);
 
@@ -272,6 +271,8 @@ var startState = {
         game.physics.arcade.overlap(player, ghosts, this.takeHit, null, this);
         game.physics.arcade.overlap(player, fires, this.healFromFire, null, this);
         game.physics.arcade.overlap(weapon.bullets, ghosts, this.enemyHit, null, this);
+
+        this.setTetrisSpawn();
 
         ghosts.forEach(this.followPlayer);
 
@@ -681,51 +682,75 @@ var startState = {
     removeTetris: function(sprite) {
             sprite.destroy();
         },
-    spawnTetris: function() {
-        if (standing === true || moving === false) {
-            tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
-            game.physics.arcade.enable(tetris);
-            tetris.checkWorldBounds = true;
-            tetris.events.onOutOfBounds.add(this.removeTetris, this);
-            tetris.anchor.setTo(0.5,0.5);
-            tetris.scale.setTo(2);
-            tetris.body.gravity.y = 400;
+    setTetrisSpawn: function() {
+        lastTetrisSpawnTime = game.time.now;
+        if (!isSpawning) {
+            console.log(lastTetrisSpawnTime);
+            isSpawning= true;
+            timerSpawn = game.time.create();
+            if (currentWave < 5) {
+                console.log("spawning in 5 sec");
+                timerSpawn.add(Phaser.Timer.SECOND * 5, this.spawnTetris, this);
+            }
+            else if (currentWave > 5 && currentWave <= 10) {
+                console.log("spawning in 4 sec");
+                timerSpawn.add(Phaser.Timer.SECOND * 4, this.spawnTetris, this);
+            }
+            else {
+                console.log("spawning in 3 sec");
+                timerSpawn.add(Phaser.Timer.SECOND * 3, this.spawnTetris, this);
+            }
+            timerSpawn.start();
         }
     },
-
-        checkBills: function() {
-
-           if (bulletBills.countLiving() !== 0) { 
-               clearedBills = false;  
-           } else {
-               clearedBills = true;
-
-           } if (clearedBills) {
-                 distance = 1.00;
-                 speed += (-10);
-                 maxBills++; 
-                 console.log("updated max-bills" + maxBills);
-                 this.spawnRndBills();
-             }
-        },
-        checkEnemies: function() {
-
-            if (ghosts.countLiving() !== 0) {
-                totalEnemies = ghosts.countLiving();
-                enemyLeft.setText('Enemies left:' + totalEnemies); 
-            } else {
-                currentWave++;
-                totalEnemies = 0;
-                enemyLeft.setText('Enemies left:' + totalEnemies);
-                wave.setText('Wave:' + currentWave);
-                cleared = true; }
-
-            if (totalEnemies == 0 && cleared) {
-                 var rndValue = game.rnd.integerInRange(0,10);
-                 if ( rndValue > 2 && rndValue < 8) { maxGhosts++; }
-                 if ( rndValue > 8) { maxGhosts += 2;}
-                 this.spawnGhost();   
+    spawnTetris: function() {
+        if (game.time.now - lastTetrisSpawnTime <= Math.ceil(game.time.physicsElapsed * 1000)) {
+            console.log(game.time.now);
+            if (standing || !moving || isSpawning) {
+                isSpawning = false;
+                tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
+                game.physics.arcade.enable(tetris);
+                tetris.checkWorldBounds = true;
+                tetris.events.onOutOfBounds.add(this.removeTetris, this);
+                tetris.anchor.setTo(0.5,0.5);
+                tetris.scale.setTo(2);
+                tetris.body.gravity.y = 250;
             }
+        }
+    },
+    checkBills: function() {
 
-        },
+        if (bulletBills.countLiving() !== 0) {
+            clearedBills = false;
+        } else {
+            clearedBills = true;
+
+        } if (clearedBills) {
+            distance = 1.00;
+            speed += (-10);
+            maxBills++;
+            console.log("updated max-bills" + maxBills);
+            this.spawnRndBills();
+        }
+    },
+    checkEnemies: function() {
+
+        if (ghosts.countLiving() !== 0) {
+            totalEnemies = ghosts.countLiving();
+            enemyLeft.setText('Enemies left:' + totalEnemies);
+        } else {
+            currentWave++;
+            totalEnemies = 0;
+            enemyLeft.setText('Enemies left:' + totalEnemies);
+            wave.setText('Wave:' + currentWave);
+            cleared = true; }
+
+        if (totalEnemies == 0 && cleared) {
+            var rndValue = game.rnd.integerInRange(0,10);
+            if ( rndValue > 2 && rndValue < 8) { maxGhosts++; }
+            if ( rndValue > 8) { maxGhosts += 2;}
+            this.spawnGhost();
+        }
+
+    },
 };
