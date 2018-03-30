@@ -571,7 +571,7 @@ var startState = {
     },
     healPlayer: function() {
         isHealing = false;
-        if (game.time.now - latestHealingTimeStamp <= Math.ceil(game.time.physicsElapsed * 1000)) {
+        if (game.time.now - latestHealingTimeStamp <= 100) {
             if(health < 3) {
                 console.log("Healing player");
                 if (!hasDied) {
@@ -697,7 +697,8 @@ var startState = {
         }
     },
     spawnTetris: function() {
-        if (game.time.now - lastTetrisSpawnTime <= Math.ceil(game.time.physicsElapsed * 1000)) {
+        if (game.time.now - lastTetrisSpawnTime <= 100) {
+            console.log
             if (standing || !moving || isSpawning) {
                 isSpawning = false;
                 tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
