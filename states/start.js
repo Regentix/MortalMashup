@@ -55,7 +55,7 @@ var fireMap = {
     3: [0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,3,0]    //Vincent
 };
 var spawnMap = {
-    0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+    0: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     1: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     2: [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
     3: [0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,3,0]
@@ -205,8 +205,6 @@ var startState = {
 
         playerX = this.playerX();
         playerY = this.playerY();
-
-        console.log("playerX: " + playerX + ", playerY: " + playerY);
 
         player = game.add.sprite(playerX,playerY,"player");
         player.anchor.setTo(0,1);
@@ -685,19 +683,15 @@ var startState = {
     setTetrisSpawn: function() {
         lastTetrisSpawnTime = game.time.now;
         if (!isSpawning) {
-            console.log(lastTetrisSpawnTime);
             isSpawning= true;
             timerSpawn = game.time.create();
             if (currentWave < 5) {
-                console.log("spawning in 5 sec");
                 timerSpawn.add(Phaser.Timer.SECOND * 5, this.spawnTetris, this);
             }
             else if (currentWave > 5 && currentWave <= 10) {
-                console.log("spawning in 4 sec");
                 timerSpawn.add(Phaser.Timer.SECOND * 4, this.spawnTetris, this);
             }
             else {
-                console.log("spawning in 3 sec");
                 timerSpawn.add(Phaser.Timer.SECOND * 3, this.spawnTetris, this);
             }
             timerSpawn.start();
@@ -705,7 +699,6 @@ var startState = {
     },
     spawnTetris: function() {
         if (game.time.now - lastTetrisSpawnTime <= Math.ceil(game.time.physicsElapsed * 1000)) {
-            console.log(game.time.now);
             if (standing || !moving || isSpawning) {
                 isSpawning = false;
                 tetris = game.add.sprite(player.position.x, 0 , tetrisIndex[game.rnd.integerInRange(0,4)]);
