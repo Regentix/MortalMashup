@@ -54,7 +54,10 @@ var menuState = {
             music.destroy();
             isMusicPlaying = false;
         }
-        music = game.add.audio('music');
+        music = new Phaser.Sound(game,'music',1,true);
+        if (!isMuted) {
+            music.play();
+        }
         game.state.start('start');
     }
 };

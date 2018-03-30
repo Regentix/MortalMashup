@@ -25,6 +25,7 @@ var clearedBills = false;
 var isHealing = false;
 var invincible = false;
 var isMusicPlaying = false;
+var isMuted = false;
 var billHeights = [390,300,220,140,80];
 var platformHeights = [0,340,260,180,120];
 var spawnHeight = [150, 190, 230, 270, 310, 350, 390];
@@ -57,11 +58,6 @@ var spawnMap = {
 };
 var startState = {
     create: function() {
-        //music.stop();
-        //music.destroy();
-        //music = game.add.audio('music');
-        music.play();
-        music.mute = false;
         isMusicPlaying = true;
         jumpSound = game.add.audio('jumpSound');
         dieSound = game.add.audio('dieSound');
@@ -191,6 +187,13 @@ var startState = {
         muteButton.inputEnabled = true;
         muteButton.events.onInputDown.add(this.toggleMute, this);
         muteButton.fixedToCamera = true;
+
+        if (isMuted) {
+            muteButton.loadTexture('mute', 0);
+        }
+        else {
+            muteButton.loadTexture('unmute', 0);
+        }
 
         jumpButton = game.add.sprite(window.innerWidth - 10, window.innerHeight - 10, 'jump');
         jumpButton.anchor.setTo(1,1);
@@ -406,12 +409,13 @@ var startState = {
     toggleMute: function() {
         music.mute = !music.mute;
         if (music.mute) {
-            //music.mute = false;
+            isMuted = true;
             muteButton.loadTexture('mute', 0);
             console.log("Music playing");
         }
         else {
-            //music.mute = true;
+            music.play();
+            isMuted = false;
             muteButton.loadTexture('unmute', 0);
             console.log("Music muted");
         }
